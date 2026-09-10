@@ -3,643 +3,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سوق غزة | متجر متعدد البائعين</title>
-    
+    <title>سوق غزة - خلاط تيربو بلس الاحترافي</title>
+    <!-- استدعاء خطوط جوجل (Cairo & Tajawal) لدعم العربية بشكل ممتاز -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- استدعاء Tailwind CSS عبر CDN لتنسيق سريع ومتجاوب -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- إعداد Tailwind لدعم الوضع الليلي وتخصيص الخطوط والألوان -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Tajawal', 'sans-serif'],
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#6366f1',     /* نيلي عصري (ترند) */
-                        primaryDark: '#4f46e5',
-                        accent: '#ec4899',      /* وردي ساطع/حيوي */
-                        surface: '#f8fafc',
-                        dark: '#0f172a'
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e', // أخضر سوق غزة
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        dark: {
+                            bg: '#111827',
+                            surface: '#1f2937',
+                            border: '#374151',
+                            text: '#f3f4f6',
+                            muted: '#9ca3af'
+                        }
                     }
                 }
             }
         }
     </script>
-
+    
+    <!-- CSS إضافي للتأثيرات والانتقالات -->
     <style>
         body {
-            background-color: theme('colors.surface');
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        h1, h2, h3, h4, h5, h6, .font-cairo {
+            font-family: 'Cairo', sans-serif;
         }
 
-        /* تحسين شكل شريط التمرير */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* تأثيرات البطاقات */
-        .product-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-color: theme('colors.primary');
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
         }
-
-        /* الإشعارات (Toasts) */
-        .toast-enter { animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .toast-leave { animation: slideOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937; 
         }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        ::-webkit-scrollbar-thumb {
+            background: #22c55e; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #16a34a; 
         }
 
-        /* حركات القائمة المنسدلة */
-        .dropdown-enter {
-            animation: fadeInDown 0.2s ease-out forwards;
+        /* حركات بسيطة */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .view-hidden { display: none !important; }
+        /* تأثير النبض للزر الرئيسي */
+        .pulse-btn {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* الأكورديون */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .accordion-content.active {
+            max-height: 500px;
+            padding-bottom: 1rem;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-icon.active {
+            transform: rotate(180deg);
+        }
+
+        /* علامات التبويب */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 dark:bg-dark-bg dark:text-dark-text min-h-screen flex flex-col">
 
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <!-- شريط علوي صغير -->
-        <div class="bg-primaryDark text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide">
-            مرحباً بكم في سوق غزة - أدعم المنتجات المحلية
-        </div>
+    <!-- شريط الإعلانات العلوي -->
+    <div class="bg-brand-600 text-white text-center py-2 px-4 text-sm font-semibold">
+        🔥 عرض خاص من سوق غزة: توصيل مجاني للطلبات فوق 200 شيكل + الدفع عند الاستلام!
+    </div>
 
-        <div class="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
-            
+    <!-- رأس الصفحة (Header) -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-dark-surface shadow-sm border-b border-gray-200 dark:border-dark-border transition-colors duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <!-- الشعار -->
-            <div class="flex items-center gap-2 cursor-pointer group" onclick="switchView('buyer')">
-                <div class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-500 text-white rounded-lg flex items-center justify-center font-cairo font-bold text-xl group-hover:scale-105 transition-transform">
+                    س
                 </div>
-                <h1 class="text-2xl font-black text-dark tracking-tight">سوق <span class="text-primary">غزة</span></h1>
-            </div>
+                <span class="font-cairo font-bold text-2xl text-brand-600 dark:text-brand-500">سوق غزة</span>
+            </a>
 
-            <!-- شريط البحث -->
-            <div id="search-container" class="flex-grow max-w-2xl hidden md:flex">
-                <div class="relative w-full flex shadow-sm rounded-full border border-gray-200 overflow-hidden bg-gray-50 focus-within:border-primary focus-within:bg-white transition-colors focus-within:ring-2 focus-within:ring-primary/20">
-                    <select id="category-filter" class="bg-transparent text-gray-600 px-4 border-l border-gray-200 outline-none text-sm cursor-pointer hover:text-primary font-medium">
-                        <option value="all">الكل</option>
-                        <option value="ملابس">ملابس</option>
-                        <option value="إلكترونيات">إلكترونيات</option>
-                        <option value="المنزل">المنزل</option>
-                        <option value="مواد غذائية">مواد غذائية</option>
-                        <option value="أدوات كهربائية">أدوات كهربائية</option>
-                        <option value="المستعمل">مستعمل</option>
-                    </select>
-                    <input type="text" id="search-input" placeholder="ابحث عن المنتجات هنا..." class="w-full px-4 py-2.5 text-gray-800 bg-transparent focus:outline-none placeholder-gray-400">
-                    <button id="search-btn" class="text-gray-400 hover:text-primary px-4 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- أزرار الإجراءات (سلة المشتريات والبيع) -->
+            <!-- أزرار التحكم (الوضع الليلي والسلة) -->
             <div class="flex items-center gap-4">
-                
-                <button onclick="switchView('vendor')" id="vendor-switch-btn" class="text-sm font-bold text-gray-600 hover:text-primary transition-colors flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    <span class="hidden sm:inline">إضافة منتج</span>
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="تبديل الوضع الليلي">
+                    <!-- أيقونة الشمس (تظهر في الوضع الليلي) -->
+                    <svg id="sunIcon" class="w-6 h-6 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <!-- أيقونة القمر (تظهر في الوضع النهاري) -->
+                    <svg id="moonIcon" class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                 </button>
-                
-                <!-- السلة المنسدلة -->
-                <div class="relative" id="cart-btn-container">
-                    <button onclick="toggleCart()" class="relative flex items-center justify-center p-2 text-gray-600 hover:text-primary transition-colors rounded-full hover:bg-gray-100" title="سلة المشتريات">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        <span id="cart-count" class="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white shadow-sm">0</span>
-                    </button>
 
-                    <!-- القائمة المنسدلة (Dropdown) -->
-                    <div id="cart-dropdown" class="absolute left-0 sm:left-auto sm:right-0 top-full mt-3 w-[320px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 hidden z-50 flex-col overflow-hidden transform origin-top-left sm:origin-top-right">
-                        <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-800 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                السلة الخاصة بك
-                            </h3>
-                            <button onclick="toggleCart()" class="text-gray-400 hover:text-red-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <!-- أيقونة وحساب المستخدم -->
+                <div class="relative group">
+                    <button class="flex items-center gap-1 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="حسابي">
+                        <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span class="hidden sm:block font-cairo font-bold text-sm text-gray-700 dark:text-gray-300">دخول</span>
+                    </button>
+                    <!-- القائمة المنسدلة (تظهر عند تمرير الماوس) -->
+                    <div class="absolute left-0 top-full mt-1 w-64 bg-white dark:bg-dark-surface rounded-xl shadow-xl border border-gray-100 dark:border-dark-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform origin-top scale-95 group-hover:scale-100 flex flex-col overflow-hidden">
+                        <div class="p-4 bg-brand-50 dark:bg-gray-800/80 border-b border-gray-100 dark:border-gray-700 text-center">
+                            <span class="block font-cairo font-bold text-gray-900 dark:text-white text-lg">أهلاً بك في سوق غزة</span>
+                            <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">سجل دخولك لتجربة تسوق أفضل</span>
+                        </div>
+                        <div class="p-2 flex flex-col gap-1">
+                            <button class="w-full text-right px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition flex items-center gap-3">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                تسجيل الدخول بالبريد
                             </button>
-                        </div>
-                        
-                        <!-- العناصر في السلة -->
-                        <div id="cart-items" class="max-h-72 overflow-y-auto p-3 flex flex-col gap-2 bg-white">
-                            <!-- سيتم حقن العناصر هنا -->
-                        </div>
-                        
-                        <!-- ملخص الدفع -->
-                        <div class="p-4 border-t bg-gray-50">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-gray-500 font-semibold text-sm">المجموع الكلي:</span>
-                                <span id="cart-total" class="text-lg font-black text-primary">0 ₪</span>
-                            </div>
-                            <button onclick="checkout()" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-2.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
-                                إتمام الطلب
+                            <button class="w-full text-right px-4 py-3 text-sm text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 font-bold rounded-lg transition flex items-center gap-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                                إنشاء حساب جديد
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- شريط الأقسام السريع (موبايل وديسكتوب) -->
-        <div class="bg-gray-50 border-t border-gray-100">
-            <div class="container mx-auto px-4 py-2 flex gap-6 overflow-x-auto whitespace-nowrap hide-scrollbar text-sm font-semibold text-gray-600">
-                <button class="hover:text-primary transition-colors flex items-center gap-1" onclick="filterByCategory('all')">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    جميع الأقسام
+
+                <button class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center transform translate-x-1 -translate-y-1">0</span>
                 </button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('ملابس')">ملابس وأزياء</button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('إلكترونيات')">إلكترونيات</button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('المنزل')">أدوات منزلية</button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('مواد غذائية')">مواد غذائية</button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('أدوات كهربائية')">أدوات كهربائية</button>
-                <button class="hover:text-primary transition-colors" onclick="filterByCategory('المستعمل')">مستعمل</button>
             </div>
         </div>
     </header>
 
-    <div class="md:hidden p-3 bg-white border-b flex gap-2 shadow-sm">
-        <input type="text" id="mobile-search-input" placeholder="ابحث في سوق غزة..." class="w-full px-4 py-2 bg-gray-100 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm">
-    </div>
-
-    <main id="buyer-view" class="container mx-auto px-4 py-8 flex-grow">
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 id="current-category-title" class="text-2xl font-black text-gray-800">أحدث المنتجات</h2>
-                <div class="w-12 h-1 bg-primary rounded-full mt-2"></div>
-            </div>
-            <span id="products-count" class="text-gray-500 text-sm font-semibold bg-white px-3 py-1 rounded-full border border-gray-200"></span>
-        </div>
-
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            <!-- سيتم حقن المنتجات هنا -->
-        </div>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
         
-        <div id="no-products-msg" class="hidden text-center py-20 bg-white rounded-3xl border border-dashed border-gray-300 my-8">
-            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <!-- شريط البحث السريع -->
+        <div class="mb-10 fade-in max-w-3xl mx-auto">
+            <div class="relative flex items-center shadow-sm hover:shadow-md transition-shadow rounded-full">
+                <input type="text" placeholder="ابحث عن سيارات، عقارات، أجهزة، أو أي شيء في سوق غزة..." class="w-full pl-4 pr-14 py-4 rounded-full border border-gray-200 dark:border-dark-border bg-white dark:bg-dark-surface text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all font-tajawal text-[15px] sm:text-base">
+                <button class="absolute right-2 bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400 hover:bg-brand-500 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-colors p-2.5 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
             </div>
-            <h3 class="text-lg font-bold text-gray-700 mb-1">لا توجد منتجات</h3>
-            <p class="text-gray-500 text-sm">لم يتم العثور على منتجات مطابقة لبحثك.</p>
-        </div>
-    </main>
-
-    <main id="vendor-view" class="container mx-auto px-4 py-8 flex-grow view-hidden">
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNlNWRlZjAiLz48L3N2Zz4=')]">
-            <div>
-                <h2 class="text-2xl font-black text-gray-800">بوابة البائعين</h2>
-                <p class="text-gray-500 text-sm mt-1">قم بإضافة سلعك وابدأ البيع في سوق غزة.</p>
-            </div>
-            <button onclick="switchView('buyer')" class="bg-white border-2 border-gray-200 hover:border-primary text-gray-700 hover:text-primary px-5 py-2 rounded-xl font-bold transition-all shadow-sm">
-                العودة للتسوق
-            </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- نموذج إضافة منتج -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:col-span-1 h-fit">
-                <h3 class="text-lg font-bold mb-5 flex items-center gap-2 border-b pb-3">
-                    <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></div>
-                    إضافة منتج جديد
-                </h3>
-                <form id="add-product-form" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">اسم السلعة *</label>
-                        <input type="text" id="p-name" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">السعر (₪) *</label>
-                            <input type="number" id="p-price" required min="1" step="0.5" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">القسم *</label>
-                            <select id="p-category" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
-                                <option value="ملابس">ملابس</option>
-                                <option value="إلكترونيات">إلكترونيات</option>
-                                <option value="المنزل">المنزل</option>
-                                <option value="مواد غذائية">مواد غذائية</option>
-                                <option value="أدوات كهربائية">أدوات كهربائية</option>
-                                <option value="المستعمل">مستعمل</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">اسم المتجر / البائع *</label>
-                        <input type="text" id="p-vendor" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm" placeholder="مثال: متجر الرمال">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">رابط الصورة (URL) *</label>
-                        <input type="url" id="p-image" required class="w-full text-left px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm" placeholder="https://...">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">وصف موجز للمنتج</label>
-                        <textarea id="p-desc" rows="2" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm resize-none"></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full bg-dark hover:bg-black text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors mt-2">
-                        نشر المنتج في السوق
-                    </button>
-                </form>
-            </div>
-
-            <!-- قائمة منتجات البائع -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden lg:col-span-2 flex flex-col">
-                <div class="p-6 border-b bg-gray-50">
-                    <h3 class="text-lg font-bold text-gray-800">المنتجات المعروضة مسبقاً</h3>
-                </div>
+        <!-- شبكة تصنيفات المتجر (مربعات الواجهة) -->
+        <div class="mb-12 fade-in">
+            <h2 class="text-xl font-cairo font-bold mb-4 text-gray-800 dark:text-gray-200">تصفح أقسام سوق غزة</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 
-                <div class="overflow-x-auto flex-grow p-4">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="text-gray-400 border-b border-gray-100">
-                                <th class="pb-3 px-2 text-sm font-bold w-1/2">المنتج</th>
-                                <th class="pb-3 px-2 text-sm font-bold">السعر</th>
-                                <th class="pb-3 px-2 text-sm font-bold">القسم</th>
-                                <th class="pb-3 px-2 text-sm font-bold text-center">إجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vendor-products-list" class="divide-y divide-gray-100">
-                            <!-- سيتم حقن الصفوف هنا -->
-                        </tbody>
-                    </table>
-                    
-                    <div id="vendor-no-products" class="hidden text-center py-16">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                <!-- سيارات -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M5 11h14l1 4H4l1-4zM4 15v4h2v-2h12v2h2v-4"></path><circle cx="7" cy="15" r="1"></circle><circle cx="17" cy="15" r="1"></circle></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">سيارات</span>
+                </a>
+
+                <!-- عقارات -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">عقارات</span>
+                </a>
+
+                <!-- الكترونيات -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">الكترونيات</span>
+                </a>
+
+                <!-- أثاث ومفروشات -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 19v-4a2 2 0 00-2-2h-1V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4H6a2 2 0 00-2 2v4M4 19h16M7 19v2M17 19v2"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">أثاث ومفروشات</span>
+                </a>
+
+                <!-- مواد غذائية -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مواد غذائية</span>
+                </a>
+
+                <!-- مطاعم -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مطاعم</span>
+                </a>
+
+                <!-- ملابس -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">ملابس</span>
+                </a>
+
+                <!-- مواد بناء -->
+                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                    <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مواد بناء</span>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- قسم المنتج الرئيسي (مثال لمنتج داخل سوق غزة) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 fade-in">
+            
+            <!-- معرض الصور -->
+            <div class="space-y-4">
+                <div class="relative rounded-2xl overflow-hidden bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border aspect-square shadow-sm flex items-center justify-center group">
+                    <img id="mainImage" src="https://placehold.co/600x600/f8fafc/1e293b?text=صورة+المنتج+الرئيسية\n(خلاط+احترافي)" alt="خلاط سوق غزة الاحترافي" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <!-- شارة الخصم -->
+                    <div class="absolute top-4 right-4 bg-red-500 text-white font-bold px-3 py-1 rounded-full text-sm">
+                        خصم 30%
+                    </div>
+                </div>
+                <!-- صور مصغرة -->
+                <div class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+                    <button class="w-20 h-20 rounded-lg border-2 border-brand-500 overflow-hidden flex-shrink-0" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+المنتج+الرئيسية')">
+                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+1" class="w-full h-full object-cover">
+                    </button>
+                    <button class="w-20 h-20 rounded-lg border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 overflow-hidden flex-shrink-0 transition" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+التفاصيل')">
+                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+2" class="w-full h-full object-cover">
+                    </button>
+                    <button class="w-20 h-20 rounded-lg border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 overflow-hidden flex-shrink-0 transition" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+أثناء+الاستخدام')">
+                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+3" class="w-full h-full object-cover">
+                    </button>
+                </div>
+            </div>
+
+            <!-- تفاصيل المنتج للعميل -->
+            <div class="flex flex-col justify-center">
+                <div class="text-sm text-brand-600 dark:text-brand-400 font-bold mb-2">قسم الالكترونيات والأجهزة المنزلية</div>
+                <!-- عنوان SEO محسّن -->
+                <h1 class="text-3xl md:text-4xl font-cairo font-bold mb-2 text-gray-900 dark:text-white leading-tight">
+                    خلاط "تيربو بلس" الاحترافي 2000 واط - لجرش الثلج وعمل السموزي بثوانٍ
+                </h1>
+                
+                <!-- التقييم والمبيعات -->
+                <div class="flex items-center gap-4 mb-4 text-sm">
+                    <div class="flex text-yellow-400">
+                        ★★★★★
+                    </div>
+                    <span class="text-gray-500 dark:text-dark-muted">(128 تقييم)</span>
+                    <span class="text-brand-600 dark:text-brand-400 font-semibold flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
+                        تم بيع 450+ قطعة هذا الأسبوع
+                    </span>
+                </div>
+
+                <!-- السعر -->
+                <div class="flex items-end gap-3 mb-6">
+                    <span class="text-4xl font-bold text-gray-900 dark:text-white">199 <span class="text-2xl font-normal">₪</span></span>
+                    <span class="text-xl text-gray-400 dark:text-gray-500 line-through mb-1">285 ₪</span>
+                    <span class="text-sm bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded mb-2 font-semibold">وفرت 86 ₪</span>
+                </div>
+
+                <!-- وصف مقنع (Copywriting) يركز على الفوائد -->
+                <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                    ودعي التعب في المطبخ! مع خلاط "تيربو بلس"، حضّري ألذ العصائر، السموزي، واطحني المكسرات والبهارات بضغطة زر. محرك جبار بقوة 2000 واط يكسر الثلج بسهولة تامة، ليوفر عليكِ الوقت والجهد كل يوم.
+                </p>
+
+                <!-- الميزات vs الفوائد -->
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 flex-shrink-0 text-brand-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                        <p class="text-gray-500 text-sm font-semibold">لم تقم بإضافة أي منتجات بعد.</p>
+                        <div>
+                            <span class="font-bold text-gray-900 dark:text-white">محرك 2000 واط (الميزة):</span>
+                            <span class="text-gray-600 dark:text-gray-400"> يخلط أقسى المكونات ويكسر الثلج بثوانٍ لتستمتعي بمشروبات مثالية (الفائدة).</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 flex-shrink-0 text-brand-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <span class="font-bold text-gray-900 dark:text-white">إبريق تريتان غير قابل للكسر:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> آمن وصحي (BPA Free) ويدوم لسنوات دون قلق من انكساره أثناء العمل.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 flex-shrink-0 text-brand-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <span class="font-bold text-gray-900 dark:text-white">6 شفرات من الستانلس ستيل:</span>
+                            <span class="text-gray-600 dark:text-gray-400"> قوام ناعم وحريري للعصائر والشوربات بلا تكتلات مزعجة.</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- أزرار الدعوة لاتخاذ إجراء (CTA) -->
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <button onclick="triggerPurchase()" class="pulse-btn flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                        <span>اطلبي الآن والدفع عند الاستلام</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </button>
+                    <button class="sm:flex-none flex items-center justify-center bg-white dark:bg-dark-surface border-2 border-brand-500 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-800 font-bold py-4 px-6 rounded-xl transition-colors">
+                        <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        أضف للسلة
+                    </button>
+                </div>
+
+                <!-- شارات الثقة (Trust Badges) -->
+                <div class="grid grid-cols-3 gap-2 text-center text-xs text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-dark-border pt-6 mt-2">
+                    <div class="flex flex-col items-center">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <span>ضمان سنة كاملة</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        </div>
+                        <span>تبديل مجاني (3 أيام)</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <span>الدفع عند الاستلام</span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- قسم الأسئلة الشائعة والسياسات -->
+        <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-sm border border-gray-200 dark:border-dark-border overflow-hidden fade-in mb-8">
+            <div class="p-6 md:p-8">
+                <h2 class="text-2xl font-cairo font-bold mb-6 text-gray-900 dark:text-white">الأسئلة الشائعة وسياسات سوق غزة</h2>
+                
+                <div class="space-y-4">
+                    <!-- أكورديون 1 -->
+                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
+                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
+                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">متى يوصلني الطلب؟</span>
+                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <div class="pt-2">
+                                نحن في "سوق غزة" نوفر لك التوصيل السريع لجميع المحافظات خلال 24 إلى 48 ساعة عمل كحد أقصى.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أكورديون 2 -->
+                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
+                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
+                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">كيف أدفع ثمن المنتج؟ وهل هو آمن؟</span>
+                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <div class="pt-2">
+                                نحن في "سوق غزة" نوفر لك الخيار الأكثر أماناً: <strong>الدفع عند الاستلام (Cash on Delivery)</strong>. لا تدفع أي شيكل حتى تستلم منتجك وتعاينه بنفسك!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أكورديون 3 -->
+                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
+                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
+                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">ما هي سياسة التبديل والاسترجاع؟</span>
+                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <div class="pt-2">
+                                حقك محفوظ! نوفر سياسة تبديل مرنة خلال <strong>3 أيام</strong> من تاريخ الاستلام في حال وجود أي عيب مصنعي أو خلل، ويتم التبديل مجاناً. المنتج مكفول لمدة عام كامل.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <div id="toast-container" class="fixed bottom-6 left-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
-
-    <footer class="bg-white border-t mt-auto py-8">
-        <div class="container mx-auto px-4 text-center text-sm text-gray-500 font-medium">
-            <p>سوق غزة المتعدد البائعين © 2026 - صُنع لخدمة المجتمع المحلي.</p>
-            <p class="mt-1 text-xs text-gray-400">جميع الأسعار بعملة الشيقل (₪)</p>
+    <!-- تذييل الصفحة -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center mt-auto border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-white text-xl font-cairo font-bold mb-4">سوق غزة (Gaza Market)</div>
+            <p class="text-sm mb-4 max-w-2xl mx-auto">السوق الإلكتروني الأكبر والأشمل. سيارات، عقارات، إلكترونيات، مطاعم والمزيد في مكان واحد. جودة عالية، توصيل سريع، ودفع آمن.</p>
+            <div class="text-xs font-cairo font-bold text-brand-500 mt-6 bg-gray-800 inline-block px-4 py-2 rounded-full">
+                جميع الحقوق محفوظة © 2026. تصميم عبد الحافظ ابو عمرة
+            </div>
         </div>
     </footer>
 
+    <!-- شاشة منبثقة تفاعلية للطلب (Modal) -->
+    <div id="purchaseModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-dark-surface w-full max-w-md rounded-2xl shadow-2xl p-6 mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-2xl font-cairo font-bold text-gray-900 dark:text-white">تأكيد الطلب السريع</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500 transition focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-4 mb-6 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <img src="https://placehold.co/80x80/f8fafc/1e293b?text=خلاط" class="w-16 h-16 rounded object-cover">
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">خلاط تيربو بلس الاحترافي</h4>
+                    <div class="text-brand-600 dark:text-brand-400 font-bold">199 ₪</div>
+                </div>
+            </div>
+
+            <!-- نموذج وهمي -->
+            <form onsubmit="submitForm(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">الاسم الكامل</label>
+                    <input type="text" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">رقم الهاتف (للتواصل عبر الواتساب)</label>
+                    <input type="tel" required dir="ltr" placeholder="05x-xxxxxxx" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition text-right">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">المدينة / العنوان بالتفصيل</label>
+                    <input type="text" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+                
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl shadow transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <span>تأكيد الطلب (الدفع عند الاستلام)</span>
+                    </button>
+                </div>
+                <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
+                    بالنقر على تأكيد، سيقوم مندوبنا بالتواصل معك لتأكيد الشحن.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- رسالة نجاح مخصصة (Custom Toast/Alert) -->
+    <div id="toastMessage" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-lg shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-[110]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastText" class="font-cairo font-bold">تم استلام طلبك بنجاح! سنتواصل معك قريباً.</span>
+    </div>
+
     <script>
-        // --- 1. إدارة الحالة (In-Memory Data) ---
-        // بيانات أولية لكي لا يكون السوق فارغاً
-        let products = [
-            { id: 1, name: 'كيس طحين (25 كيلو)', price: 120, category: 'مواد غذائية', vendor: 'بقالة أبو أحمد', image: 'https://placehold.co/400x400/0f172a/ffffff?text=طحين', desc: 'كيس طحين وكالة أبيض وزن 25 كيلو.' },
-            { id: 2, name: 'لوح طاقة شمسية 150 واط', price: 250, category: 'أدوات كهربائية', vendor: 'شركة الطاقة للبدائل', image: 'https://placehold.co/400x400/0f172a/ffffff?text=لوح+طاقة', desc: 'لوح طاقة شمسية ممتاز لشحن البطاريات وتشغيل الراوتر.' },
-            { id: 3, name: 'طنجرة ضغط أفغانية 10 لتر', price: 180, category: 'المنزل', vendor: 'أدوات منزلية سنتر', image: 'https://placehold.co/400x400/0f172a/ffffff?text=طنجرة+ضغط', desc: 'طنجرة ضغط توفر الغاز وتسرع عملية الطهي بشكل كبير.' },
-            { id: 4, name: 'بطارية ليثيوم 100 أمبير', price: 1100, category: 'أدوات كهربائية', vendor: 'معرض التقنية', image: 'https://placehold.co/400x400/0f172a/ffffff?text=بطارية+ليثيوم', desc: 'بطارية ليثيوم عمر طويل لتشغيل الإنارة والإنترنت.' },
-            { id: 5, name: 'ترنج شتوي ولادي', price: 45, category: 'ملابس', vendor: 'كسوة العيد', image: 'https://placehold.co/400x400/0f172a/ffffff?text=ملابس', desc: 'ترنج شتوي دافئ للأطفال من سن 6 إلى 10 سنوات.' },
-            { id: 6, name: 'مروحة شحن 12 فولت', price: 90, category: 'إلكترونيات', vendor: 'النور للكهربائيات', image: 'https://placehold.co/400x400/0f172a/ffffff?text=مروحة', desc: 'مروحة تعمل على بطارية 12 فولت مباشرة لتخفيف الحر.' },
-            { id: 7, name: 'شادر نايلون مقوى (4x4)', price: 60, category: 'المنزل', vendor: 'مستلزمات الإيواء', image: 'https://placehold.co/400x400/0f172a/ffffff?text=شادر', desc: 'شادر نايلون سميك ومقوى للحماية من المطر والشمس.' },
-            { id: 8, name: 'كرتونة معلبات فول (24 حبة)', price: 40, category: 'مواد غذائية', vendor: 'سوبر ماركت البركة', image: 'https://placehold.co/400x400/0f172a/ffffff?text=معلبات', desc: 'كرتونة فول مدمس جودة ممتازة جاهز للأكل.' },
-            { id: 9, name: 'جوال شاومي مستعمل', price: 450, category: 'المستعمل', vendor: 'محلات الاتصالات', image: 'https://placehold.co/400x400/0f172a/ffffff?text=جوال+مستعمل', desc: 'جوال شاومي ريدمي مستعمل ونظيف جداً، بطارية ممتازة.' }
-        ];
+        // 1. نظام الوضع الليلي (Dark Mode)
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const html = document.documentElement;
+
+        // التحقق من التفضيل المحفوظ أو تفضيل النظام
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+        }
         
-        let cart = [];
-        let currentView = 'buyer'; 
-        let currentCategoryFilter = 'all';
-        let currentSearchQuery = '';
+        initTheme();
 
-        // --- 2. الإشعارات (Toasts) ---
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            const bgClass = type === 'success' ? 'bg-primary' : 'bg-red-500';
-            const icon = type === 'success' 
-                ? `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`
-                : `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+            } else {
+                localStorage.theme = 'light';
+            }
+        });
 
-            toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 toast-enter border border-white/10 pointer-events-auto`;
-            toast.innerHTML = `${icon} <span class="font-bold text-sm tracking-wide">${message}</span>`;
-            
-            container.appendChild(toast);
-
+        // 2. تبديل الصور الرئيسية
+        function changeImage(element, src) {
+            const mainImg = document.getElementById('mainImage');
+            mainImg.style.opacity = 0;
             setTimeout(() => {
-                toast.classList.replace('toast-enter', 'toast-leave');
-                setTimeout(() => toast.remove(), 400); 
-            }, 3000);
-        }
-
-        // --- 3. التنقل بين الواجهات ---
-        function switchView(view) {
-            currentView = view;
-            const buyerView = document.getElementById('buyer-view');
-            const vendorView = document.getElementById('vendor-view');
-            const searchContainer = document.getElementById('search-container');
-            const vendorBtn = document.getElementById('vendor-switch-btn');
-
-            // إخفاء السلة إذا كانت مفتوحة عند تبديل الواجهة
-            document.getElementById('cart-dropdown').classList.add('hidden');
-
-            if (view === 'buyer') {
-                buyerView.classList.remove('view-hidden');
-                vendorView.classList.add('view-hidden');
-                searchContainer.classList.remove('hidden');
-                vendorBtn.classList.remove('text-primary', 'bg-primary/10');
-                renderProducts();
-            } else {
-                buyerView.classList.add('view-hidden');
-                vendorView.classList.remove('view-hidden');
-                searchContainer.classList.add('hidden');
-                vendorBtn.classList.add('text-primary', 'bg-primary/10');
-                renderVendorList();
-            }
-        }
-
-        // --- 4. واجهة المشتري وعرض المنتجات ---
-        function renderProducts() {
-            const grid = document.getElementById('products-grid');
-            const noMsg = document.getElementById('no-products-msg');
-            const title = document.getElementById('current-category-title');
-            const count = document.getElementById('products-count');
+                mainImg.src = src;
+                mainImg.style.opacity = 1;
+            }, 150);
             
-            grid.innerHTML = '';
-            
-            // الفلترة
-            let filtered = products.filter(p => {
-                const matchCategory = currentCategoryFilter === 'all' || p.category === currentCategoryFilter;
-                const matchSearch = p.name.includes(currentSearchQuery) || p.vendor.includes(currentSearchQuery);
-                return matchCategory && matchSearch;
+            // تحديث الإطار للزر النشط
+            document.querySelectorAll('.overflow-hidden.border-brand-500').forEach(el => {
+                el.classList.remove('border-brand-500');
+                el.classList.add('border-transparent');
             });
-
-            // تحديث العناوين
-            title.textContent = currentCategoryFilter === 'all' ? 'أحدث المنتجات' : currentCategoryFilter;
-            count.textContent = `${filtered.length} منتجات`;
-
-            if (filtered.length === 0) {
-                noMsg.classList.remove('hidden');
-            } else {
-                noMsg.classList.add('hidden');
-                filtered.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card bg-white rounded-2xl border border-gray-100 overflow-hidden flex flex-col group';
-                    card.innerHTML = `
-                        <div class="relative bg-gray-50 aspect-square overflow-hidden flex items-center justify-center p-4">
-                            <img src="${p.image}" alt="${p.name}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/f8fafc/94a3b8?text=بدون+صورة'">
-                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">${p.category}</span>
-                        </div>
-                        <div class="p-4 flex flex-col flex-grow">
-                            <div class="flex items-center gap-1 mb-2 text-[11px] text-gray-500 font-bold">
-                                <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
-                                ${p.vendor}
-                            </div>
-                            <h3 class="font-bold text-gray-800 text-sm leading-snug mb-1 line-clamp-2" title="${p.name}">${p.name}</h3>
-                            <p class="text-xs text-gray-400 line-clamp-1 mb-3">${p.desc}</p>
-                            
-                            <div class="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">
-                                <span class="text-lg font-black text-dark">${p.price.toFixed(2)} <span class="text-xs text-gray-500 font-bold">₪</span></span>
-                                <button onclick="addToCart(${p.id})" class="bg-primary hover:bg-primaryDark text-white w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-transform active:scale-90" title="أضف للسلة">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
+            element.classList.remove('border-transparent');
+            element.classList.add('border-brand-500');
         }
 
-        // أحداث البحث
-        function filterByCategory(cat) {
-            currentCategoryFilter = cat;
-            document.getElementById('category-filter').value = cat;
-            if (currentView !== 'buyer') switchView('buyer');
-            else renderProducts();
-        }
-
-        document.getElementById('category-filter').addEventListener('change', (e) => filterByCategory(e.target.value));
+        // 3. نظام الأكورديون (FAQ)
+        const accordions = document.querySelectorAll('.accordion-header');
         
-        function applySearch(val) {
-            currentSearchQuery = val;
-            if (currentView !== 'buyer') switchView('buyer');
-            else renderProducts();
+        accordions.forEach(acc => {
+            acc.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.accordion-icon');
+                
+                // إغلاق البقية (اختياري)
+                accordions.forEach(otherAcc => {
+                    if (otherAcc !== this) {
+                        otherAcc.nextElementSibling.classList.remove('active');
+                        otherAcc.querySelector('.accordion-icon').classList.remove('active');
+                    }
+                });
+
+                // تبديل الحالي
+                content.classList.toggle('active');
+                icon.classList.toggle('active');
+            });
+        });
+
+        // 5. نظام الشاشة المنبثقة للطلب (Modal)
+        const modal = document.getElementById('purchaseModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function triggerPurchase() {
+            modal.classList.remove('hidden');
+            // تأخير بسيط للسماح للمتصفح برسم العنصر قبل تطبيق تأثير الشفافية والحجم
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
         }
 
-        document.getElementById('search-input').addEventListener('input', (e) => applySearch(e.target.value));
-        document.getElementById('mobile-search-input').addEventListener('input', (e) => applySearch(e.target.value));
-
-        // --- 5. سلة المشتريات (القائمة المنسدلة Dropdown) ---
-        function toggleCart() {
-            const dropdown = document.getElementById('cart-dropdown');
-            if (dropdown.classList.contains('hidden')) {
-                dropdown.classList.remove('hidden');
-                dropdown.classList.add('dropdown-enter');
-            } else {
-                dropdown.classList.add('hidden');
-                dropdown.classList.remove('dropdown-enter');
-            }
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // يتوافق مع مدة الـ transition
         }
 
-        // إغلاق السلة عند النقر خارجها
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('cart-dropdown');
-            const cartBtn = document.getElementById('cart-btn-container');
-            if (!dropdown.classList.contains('hidden') && !cartBtn.contains(event.target)) {
-                dropdown.classList.add('hidden');
+        // إغلاق عند النقر خارج المربع
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
             }
         });
 
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            const existing = cart.find(item => item.id === productId);
-            if (existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
+        // 6. معالجة نموذج الطلب الوهمي ورسالة النجاح (Toast)
+        function submitForm(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
             
-            updateCartUI();
-            showToast('تمت الإضافة إلى السلة بنجاح');
+            // إغلاق المودال
+            closeModal();
             
-            // إضافة تأثير نبض لأيقونة السلة
-            const countBadge = document.getElementById('cart-count');
-            countBadge.classList.add('animate-ping');
-            setTimeout(() => countBadge.classList.remove('animate-ping'), 300);
+            // إظهار رسالة النجاح
+            showToast("تم تسجيل طلبك بنجاح! سيتم التواصل معك عبر الواتساب لتأكيد الشحن.");
+            
+            // إعادة تعيين النموذج
+            e.target.reset();
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartUI();
+        function showToast(message) {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            
+            toastText.innerText = message;
+            
+            // إظهار
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            // إخفاء بعد 4 ثواني
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
         }
-
-        function updateQuantity(productId, delta) {
-            const item = cart.find(i => i.id === productId);
-            if (!item) return;
-            
-            item.quantity += delta;
-            if (item.quantity <= 0) {
-                removeFromCart(productId);
-            } else {
-                updateCartUI();
-            }
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cart-items');
-            const countBadge = document.getElementById('cart-count');
-            const totalEl = document.getElementById('cart-total');
-            
-            container.innerHTML = '';
-            let total = 0;
-            let count = 0;
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-gray-400 flex flex-col items-center">
-                        <svg class="w-12 h-12 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        <p class="text-sm font-semibold">سلة المشتريات فارغة</p>
-                    </div>`;
-            } else {
-                cart.forEach(item => {
-                    total += item.price * item.quantity;
-                    count += item.quantity;
-                    
-                    const el = document.createElement('div');
-                    el.className = 'flex gap-3 bg-white p-2 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors group';
-                    el.innerHTML = `
-                        <div class="w-14 h-14 bg-gray-50 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden p-1">
-                            <img src="${item.image}" class="max-w-full max-h-full object-contain" onerror="this.src='https://placehold.co/100x100/f8fafc/94a3b8'">
-                        </div>
-                        <div class="flex-grow flex flex-col justify-between py-0.5">
-                            <div class="flex justify-between items-start">
-                                <h4 class="text-xs font-bold text-gray-800 line-clamp-1 pr-1" title="${item.name}">${item.name}</h4>
-                                <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 transition-colors p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                            </div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="font-black text-sm text-dark">${(item.price * item.quantity).toFixed(2)} ₪</span>
-                                <div class="flex items-center bg-gray-100 rounded-lg border border-gray-200">
-                                    <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:text-primary font-bold text-lg leading-none">+</button>
-                                    <span class="text-xs font-bold w-5 text-center text-gray-800">${item.quantity}</span>
-                                    <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:text-red-500 font-bold text-lg leading-none">-</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(el);
-                });
-            }
-
-            countBadge.textContent = count;
-            totalEl.textContent = `${total.toFixed(2)} ₪`;
-        }
-
-        function checkout() {
-            if (cart.length === 0) {
-                showToast('السلة فارغة، أضف منتجات أولاً.', 'error');
-                return;
-            }
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            showToast('تم استلام طلبك بنجاح! شكراً لثقتكم.');
-        }
-
-        // --- 6. واجهة البائع (لوحة التحكم) ---
-        document.getElementById('add-product-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('p-name').value;
-            const price = parseFloat(document.getElementById('p-price').value);
-            const category = document.getElementById('p-category').value;
-            const vendor = document.getElementById('p-vendor').value;
-            const image = document.getElementById('p-image').value;
-            const desc = document.getElementById('p-desc').value;
-
-            const newProduct = {
-                id: Date.now(), 
-                name, price, category, vendor, image, desc
-            };
-
-            // الإضافة إلى بداية المصفوفة
-            products.unshift(newProduct);
-            
-            this.reset();
-            renderVendorList();
-            showToast('تم نشر المنتج بنجاح في سوق غزة');
-        });
-
-        function renderVendorList() {
-            const tbody = document.getElementById('vendor-products-list');
-            const noMsg = document.getElementById('vendor-no-products');
-            
-            tbody.innerHTML = '';
-            
-            if (products.length === 0) {
-                noMsg.classList.remove('hidden');
-            } else {
-                noMsg.classList.add('hidden');
-                products.forEach(p => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-gray-50/50 transition-colors group';
-                    tr.innerHTML = `
-                        <td class="py-3 px-2">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border border-gray-100 flex-shrink-0">
-                                    <img src="${p.image}" class="max-w-full max-h-full object-contain" onerror="this.src='https://placehold.co/40x40/f8fafc/94a3b8'">
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="font-bold text-gray-800 text-sm line-clamp-1 max-w-[200px]" title="${p.name}">${p.name}</span>
-                                    <span class="text-[10px] font-bold text-gray-400">${p.vendor}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3 px-2 font-black text-gray-800 text-sm">${p.price.toFixed(2)} ₪</td>
-                        <td class="py-3 px-2">
-                            <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-md font-bold">${p.category}</span>
-                        </td>
-                        <td class="py-3 px-2 text-center">
-                            <button onclick="deleteProduct(${p.id})" class="text-gray-400 hover:text-red-500 bg-white hover:bg-red-50 p-1.5 rounded-lg border border-transparent hover:border-red-100 transition-colors" title="حذف المنتج">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-        }
-
-        function deleteProduct(id) {
-            products = products.filter(p => p.id !== id);
-            cart = cart.filter(item => item.id !== id);
-            
-            renderVendorList();
-            updateCartUI();
-            showToast('تم حذف المنتج', 'error');
-        }
-
-        // --- 7. التشغيل المبدئي ---
-        renderProducts();
-        updateCartUI();
-
     </script>
 </body>
 </html>
