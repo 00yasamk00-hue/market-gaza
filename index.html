@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سوق غزة - خلاط تيربو بلس الاحترافي</title>
-    <!-- استدعاء خطوط جوجل (Cairo & Tajawal) لدعم العربية بشكل ممتاز -->
+    <title>سوق غزة</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- استدعاء Tailwind CSS عبر CDN لتنسيق سريع ومتجاوب -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- إعداد Tailwind لدعم الوضع الليلي وتخصيص الخطوط والألوان -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -25,7 +22,7 @@
                         brand: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
-                            500: '#22c55e', // أخضر سوق غزة
+                            500: '#22c55e',
                             600: '#16a34a',
                             700: '#15803d',
                             900: '#14532d',
@@ -43,7 +40,6 @@
         }
     </script>
     
-    <!-- CSS إضافي للتأثيرات والانتقالات -->
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -54,7 +50,6 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        /* تخصيص شريط التمرير */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -72,7 +67,6 @@
             background: #16a34a; 
         }
 
-        /* حركات بسيطة */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -81,43 +75,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* تأثير النبض للزر الرئيسي */
-        .pulse-btn {
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-
-        /* الأكورديون */
-        .accordion-content {
-            transition: max-height 0.3s ease-out, padding 0.3s ease;
-            max-height: 0;
-            overflow: hidden;
-        }
-        .accordion-content.active {
-            max-height: 500px;
-            padding-bottom: 1rem;
-        }
-        .accordion-icon {
-            transition: transform 0.3s ease;
-        }
-        .accordion-icon.active {
-            transform: rotate(180deg);
-        }
-
-        /* علامات التبويب */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -125,19 +82,36 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        .section-toggle-btn {
+            transition: all 0.3s ease;
+        }
+        .section-toggle-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .image-upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .image-upload-area:hover {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+        .dark .image-upload-area {
+            border-color: #4b5563;
+        }
+        .dark .image-upload-area:hover {
+            border-color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-dark-bg dark:text-dark-text min-h-screen flex flex-col">
 
-    <!-- شريط الإعلانات العلوي -->
-    <div class="bg-brand-600 text-white text-center py-2 px-4 text-sm font-semibold">
-        🔥 عرض خاص من سوق غزة: توصيل مجاني للطلبات فوق 200 شيكل + الدفع عند الاستلام!
-    </div>
-
     <!-- رأس الصفحة (Header) -->
     <header class="sticky top-0 z-50 bg-white dark:bg-dark-surface shadow-sm border-b border-gray-200 dark:border-dark-border transition-colors duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <!-- الشعار -->
             <a href="#" class="flex items-center gap-2 group">
                 <div class="w-10 h-10 bg-brand-500 text-white rounded-lg flex items-center justify-center font-cairo font-bold text-xl group-hover:scale-105 transition-transform">
                     س
@@ -145,22 +119,29 @@
                 <span class="font-cairo font-bold text-2xl text-brand-600 dark:text-brand-500">سوق غزة</span>
             </a>
 
-            <!-- أزرار التحكم (الوضع الليلي والسلة) -->
             <div class="flex items-center gap-4">
                 <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="تبديل الوضع الليلي">
-                    <!-- أيقونة الشمس (تظهر في الوضع الليلي) -->
-                    <svg id="sunIcon" class="w-6 h-6 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <!-- أيقونة القمر (تظهر في الوضع النهاري) -->
-                    <svg id="moonIcon" class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg class="w-6 h-6 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                 </button>
 
-                <!-- أيقونة وحساب المستخدم -->
+                <!-- أيقونة الدليفري -->
+                <button class="relative flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition group" aria-label="الدليفري" title="الدليفري">
+                    <div class="relative">
+                        <svg class="w-6 h-6 text-gray-600 dark:text-gray-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+                        </svg>
+                        <span class="absolute -top-1 -left-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-dark-surface"></span>
+                    </div>
+                    <span class="hidden sm:block font-cairo font-bold text-sm text-gray-700 dark:text-gray-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">الدليفري</span>
+                </button>
+
                 <div class="relative group">
                     <button class="flex items-center gap-1 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="حسابي">
                         <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         <span class="hidden sm:block font-cairo font-bold text-sm text-gray-700 dark:text-gray-300">دخول</span>
                     </button>
-                    <!-- القائمة المنسدلة (تظهر عند تمرير الماوس) -->
                     <div class="absolute left-0 top-full mt-1 w-64 bg-white dark:bg-dark-surface rounded-xl shadow-xl border border-gray-100 dark:border-dark-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform origin-top scale-95 group-hover:scale-100 flex flex-col overflow-hidden">
                         <div class="p-4 bg-brand-50 dark:bg-gray-800/80 border-b border-gray-100 dark:border-gray-700 text-center">
                             <span class="block font-cairo font-bold text-gray-900 dark:text-white text-lg">أهلاً بك في سوق غزة</span>
@@ -171,7 +152,7 @@
                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 تسجيل الدخول بالبريد
                             </button>
-                            <button class="w-full text-right px-4 py-3 text-sm text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 font-bold rounded-lg transition flex items-center gap-3">
+                            <button onclick="openSignupModal()" class="w-full text-right px-4 py-3 text-sm text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 font-bold rounded-lg transition flex items-center gap-3">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                                 إنشاء حساب جديد
                             </button>
@@ -189,7 +170,7 @@
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
         
-        <!-- شريط البحث السريع -->
+        <!-- شريط البحث -->
         <div class="mb-10 fade-in max-w-3xl mx-auto">
             <div class="relative flex items-center shadow-sm hover:shadow-md transition-shadow rounded-full">
                 <input type="text" placeholder="ابحث عن سيارات، عقارات، أجهزة، أو أي شيء في سوق غزة..." class="w-full pl-4 pr-14 py-4 rounded-full border border-gray-200 dark:border-dark-border bg-white dark:bg-dark-surface text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all font-tajawal text-[15px] sm:text-base">
@@ -199,250 +180,643 @@
             </div>
         </div>
 
-        <!-- شبكة تصنيفات المتجر (مربعات الواجهة) -->
+        <!-- شبكة تصنيفات المتجر -->
         <div class="mb-12 fade-in">
             <h2 class="text-xl font-cairo font-bold mb-4 text-gray-800 dark:text-gray-200">تصفح أقسام سوق غزة</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                
-                <!-- سيارات -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#cars-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M5 11h14l1 4H4l1-4zM4 15v4h2v-2h12v2h2v-4"></path><circle cx="7" cy="15" r="1"></circle><circle cx="17" cy="15" r="1"></circle></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">سيارات</span>
                 </a>
 
-                <!-- عقارات -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#realestate-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">عقارات</span>
                 </a>
 
-                <!-- الكترونيات -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#electronics-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group p-2 text-center">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">الكترونيات</span>
+                    <span class="font-cairo font-bold text-gray-800 dark:text-gray-200 text-sm">الالكترونيات والأجهزة المنزلية</span>
                 </a>
 
-                <!-- أثاث ومفروشات -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#furniture-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 19v-4a2 2 0 00-2-2h-1V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4H6a2 2 0 00-2 2v4M4 19h16M7 19v2M17 19v2"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">أثاث ومفروشات</span>
                 </a>
 
-                <!-- مواد غذائية -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#food-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مواد غذائية</span>
                 </a>
 
-                <!-- مطاعم -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#restaurants-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مطاعم</span>
                 </a>
 
-                <!-- ملابس -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#clothes-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">ملابس</span>
                 </a>
 
-                <!-- مواد بناء -->
-                <a href="#" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
+                <a href="#construction-section" class="aspect-square bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:shadow-md transition-all group">
                     <div class="p-4 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-full group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     </div>
                     <span class="font-cairo font-bold text-gray-800 dark:text-gray-200">مواد بناء</span>
                 </a>
-
             </div>
         </div>
 
-        <!-- قسم المنتج الرئيسي (مثال لمنتج داخل سوق غزة) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 fade-in">
-            
-            <!-- معرض الصور -->
-            <div class="space-y-4">
-                <div class="relative rounded-2xl overflow-hidden bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border aspect-square shadow-sm flex items-center justify-center group">
-                    <img id="mainImage" src="https://placehold.co/600x600/f8fafc/1e293b?text=صورة+المنتج+الرئيسية\n(خلاط+احترافي)" alt="خلاط سوق غزة الاحترافي" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <!-- شارة الخصم -->
-                    <div class="absolute top-4 right-4 bg-red-500 text-white font-bold px-3 py-1 rounded-full text-sm">
-                        خصم 30%
-                    </div>
-                </div>
-                <!-- صور مصغرة -->
-                <div class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
-                    <button class="w-20 h-20 rounded-lg border-2 border-brand-500 overflow-hidden flex-shrink-0" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+المنتج+الرئيسية')">
-                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+1" class="w-full h-full object-cover">
-                    </button>
-                    <button class="w-20 h-20 rounded-lg border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 overflow-hidden flex-shrink-0 transition" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+التفاصيل')">
-                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+2" class="w-full h-full object-cover">
-                    </button>
-                    <button class="w-20 h-20 rounded-lg border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 overflow-hidden flex-shrink-0 transition" onclick="changeImage(this, 'https://placehold.co/600x600/f8fafc/1e293b?text=صورة+أثناء+الاستخدام')">
-                        <img src="https://placehold.co/100x100/f8fafc/1e293b?text=صورة+3" class="w-full h-full object-cover">
-                    </button>
-                </div>
+        <!-- قسم السيارات -->
+        <section id="cars-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    سيارات من غزة
+                </h2>
+                <button onclick="openAdModal('سيارات')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
             </div>
-
-            <!-- تفاصيل المنتج للعميل -->
-            <div class="flex flex-col justify-center">
-                <div class="text-sm text-brand-600 dark:text-brand-400 font-bold mb-2">قسم الالكترونيات والأجهزة المنزلية</div>
-                <!-- عنوان SEO محسّن -->
-                <h1 class="text-3xl md:text-4xl font-cairo font-bold mb-2 text-gray-900 dark:text-white leading-tight">
-                    خلاط "تيربو بلس" الاحترافي 2000 واط - لجرش الثلج وعمل السموزي بثوانٍ
-                </h1>
-                
-                <!-- التقييم والمبيعات -->
-                <div class="flex items-center gap-4 mb-4 text-sm">
-                    <div class="flex text-yellow-400">
-                        ★★★★★
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=تويوتا+كورولا" class="w-full h-full object-cover group-hover:scale-105 transition" alt="تويوتا كورولا">
                     </div>
-                    <span class="text-gray-500 dark:text-dark-muted">(128 تقييم)</span>
-                    <span class="text-brand-600 dark:text-brand-400 font-semibold flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
-                        تم بيع 450+ قطعة هذا الأسبوع
-                    </span>
-                </div>
-
-                <!-- السعر -->
-                <div class="flex items-end gap-3 mb-6">
-                    <span class="text-4xl font-bold text-gray-900 dark:text-white">199 <span class="text-2xl font-normal">₪</span></span>
-                    <span class="text-xl text-gray-400 dark:text-gray-500 line-through mb-1">285 ₪</span>
-                    <span class="text-sm bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded mb-2 font-semibold">وفرت 86 ₪</span>
-                </div>
-
-                <!-- وصف مقنع (Copywriting) يركز على الفوائد -->
-                <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    ودعي التعب في المطبخ! مع خلاط "تيربو بلس"، حضّري ألذ العصائر، السموزي، واطحني المكسرات والبهارات بضغطة زر. محرك جبار بقوة 2000 واط يكسر الثلج بسهولة تامة، ليوفر عليكِ الوقت والجهد كل يوم.
-                </p>
-
-                <!-- الميزات vs الفوائد -->
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-3">
-                        <div class="mt-1 flex-shrink-0 text-brand-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">تويوتا كورولا 2019</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ ساعتين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">45,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
                         </div>
-                        <div>
-                            <span class="font-bold text-gray-900 dark:text-white">محرك 2000 واط (الميزة):</span>
-                            <span class="text-gray-600 dark:text-gray-400"> يخلط أقسى المكونات ويكسر الثلج بثوانٍ لتستمتعي بمشروبات مثالية (الفائدة).</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="mt-1 flex-shrink-0 text-brand-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div>
-                            <span class="font-bold text-gray-900 dark:text-white">إبريق تريتان غير قابل للكسر:</span>
-                            <span class="text-gray-600 dark:text-gray-400"> آمن وصحي (BPA Free) ويدوم لسنوات دون قلق من انكساره أثناء العمل.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="mt-1 flex-shrink-0 text-brand-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div>
-                            <span class="font-bold text-gray-900 dark:text-white">6 شفرات من الستانلس ستيل:</span>
-                            <span class="text-gray-600 dark:text-gray-400"> قوام ناعم وحريري للعصائر والشوربات بلا تكتلات مزعجة.</span>
-                        </div>
-                    </li>
-                </ul>
-
-                <!-- أزرار الدعوة لاتخاذ إجراء (CTA) -->
-                <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                    <button onclick="triggerPurchase()" class="pulse-btn flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
-                        <span>اطلبي الآن والدفع عند الاستلام</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </button>
-                    <button class="sm:flex-none flex items-center justify-center bg-white dark:bg-dark-surface border-2 border-brand-500 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-800 font-bold py-4 px-6 rounded-xl transition-colors">
-                        <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        أضف للسلة
-                    </button>
-                </div>
-
-                <!-- شارات الثقة (Trust Badges) -->
-                <div class="grid grid-cols-3 gap-2 text-center text-xs text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-dark-border pt-6 mt-2">
-                    <div class="flex flex-col items-center">
-                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <span>ضمان سنة كاملة</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                        </div>
-                        <span>تبديل مجاني (3 أيام)</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full mb-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        </div>
-                        <span>الدفع عند الاستلام</span>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- قسم الأسئلة الشائعة والسياسات -->
-        <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-sm border border-gray-200 dark:border-dark-border overflow-hidden fade-in mb-8">
-            <div class="p-6 md:p-8">
-                <h2 class="text-2xl font-cairo font-bold mb-6 text-gray-900 dark:text-white">الأسئلة الشائعة وسياسات سوق غزة</h2>
-                
-                <div class="space-y-4">
-                    <!-- أكورديون 1 -->
-                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
-                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
-                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">متى يوصلني الطلب؟</span>
-                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                            <div class="pt-2">
-                                نحن في "سوق غزة" نوفر لك التوصيل السريع لجميع المحافظات خلال 24 إلى 48 ساعة عمل كحد أقصى.
-                            </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=هيونداي+النترا" class="w-full h-full object-cover group-hover:scale-105 transition" alt="هيونداي النترا">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">هيونداي النترا 2020</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 5 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">52,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
                         </div>
                     </div>
-
-                    <!-- أكورديون 2 -->
-                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
-                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
-                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">كيف أدفع ثمن المنتج؟ وهل هو آمن؟</span>
-                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                            <div class="pt-2">
-                                نحن في "سوق غزة" نوفر لك الخيار الأكثر أماناً: <strong>الدفع عند الاستلام (Cash on Delivery)</strong>. لا تدفع أي شيكل حتى تستلم منتجك وتعاينه بنفسك!
-                            </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=كيا+سيراتو" class="w-full h-full object-cover group-hover:scale-105 transition" alt="كيا سيراتو">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">كيا سيراتو 2018</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الشيخ رضوان</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">38,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
                         </div>
                     </div>
-
-                    <!-- أكورديون 3 -->
-                    <div class="border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden">
-                        <button class="accordion-header w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none">
-                            <span class="font-bold text-gray-800 dark:text-gray-200 text-right">ما هي سياسة التبديل والاسترجاع؟</span>
-                            <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div class="accordion-content bg-white dark:bg-dark-surface px-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                            <div class="pt-2">
-                                حقك محفوظ! نوفر سياسة تبديل مرنة خلال <strong>3 أيام</strong> من تاريخ الاستلام في حال وجود أي عيب مصنعي أو خلل، ويتم التبديل مجاناً. المنتج مكفول لمدة عام كامل.
-                            </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=نيسان+صني" class="w-full h-full object-cover group-hover:scale-105 transition" alt="نيسان صني">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">نيسان صني 2021</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - تل الهوا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">60,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- قسم العقارات -->
+        <section id="realestate-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    عقارات من غزة
+                </h2>
+                <button onclick="openAdModal('عقارات')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=شقة+للإيجار" class="w-full h-full object-cover group-hover:scale-105 transition" alt="شقة للإيجار">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">شقة للإيجار - 3 غرف</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 4 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">1,200 ₪/شهر</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=أرض+للبيع" class="w-full h-full object-cover group-hover:scale-105 transition" alt="أرض للبيع">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">أرض للبيع - 500م</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الزيتون</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يومين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">85,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=فيلا+للبيع" class="w-full h-full object-cover group-hover:scale-105 transition" alt="فيلا للبيع">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">فيلا للبيع - 200م</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - تل الهوا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">320,000 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=محل+تجاري" class="w-full h-full object-cover group-hover:scale-105 transition" alt="محل تجاري">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">محل تجاري للإيجار</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - عمر المختار</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 5 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">2,500 ₪/شهر</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الإلكترونيات -->
+        <section id="electronics-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    إلكترونيات من غزة
+                </h2>
+                <button onclick="openAdModal('إلكترونيات')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=iPhone+13" class="w-full h-full object-cover group-hover:scale-105 transition" alt="iPhone 13">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">iPhone 13 Pro</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ ساعة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">3,500 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=لابتوب+HP" class="w-full h-full object-cover group-hover:scale-105 transition" alt="لابتوب HP">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">لابتوب HP i7</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">2,800 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=تلفاز+سامسونج" class="w-full h-full object-cover group-hover:scale-105 transition" alt="تلفاز سامسونج">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">تلفاز سامسونج 55"</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الشيخ رضوان</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">2,200 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=غسالة+LG" class="w-full h-full object-cover group-hover:scale-105 transition" alt="غسالة LG">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">غسالة LG أوتوماتيك</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الزيتون</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يومين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">1,800 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الأثاث -->
+        <section id="furniture-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    أثاث ومفروشات من غزة
+                </h2>
+                <button onclick="openAdModal('أثاث ومفروشات')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=طقم+كنب" class="w-full h-full object-cover group-hover:scale-105 transition" alt="طقم كنب">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">طقم كنب 7 مقاعد</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 6 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">2,500 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=سرير+خشبي" class="w-full h-full object-cover group-hover:scale-105 transition" alt="سرير خشبي">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">سرير خشبي مزدوج</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">1,200 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=طاولة+طعام" class="w-full h-full object-cover group-hover:scale-105 transition" alt="طاولة طعام">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">طاولة طعام 6 كراسي</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - تل الهوا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 4 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">900 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=خزانة+ملابس" class="w-full h-full object-cover group-hover:scale-105 transition" alt="خزانة ملابس">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">خزانة ملابس 5 أبواب</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الشيخ رضوان</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 5 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">1,500 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم المواد الغذائية -->
+        <section id="food-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    مواد غذائية من غزة
+                </h2>
+                <button onclick="openAdModal('مواد غذائية')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=زيت+زيتون" class="w-full h-full object-cover group-hover:scale-105 transition" alt="زيت زيتون">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">زيت زيتون غزة 5 لتر</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - دير البلح</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ ساعتين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">120 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=عسل+طبيعي" class="w-full h-full object-cover group-hover:scale-105 transition" alt="عسل طبيعي">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">عسل طبيعي 100%</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - خان يونس</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 5 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">85 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=تمر+مجفف" class="w-full h-full object-cover group-hover:scale-105 transition" alt="تمر مجفف">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">تمر مجفف فاخر</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - رفح</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">45 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=جبنة+بيضاء" class="w-full h-full object-cover group-hover:scale-105 transition" alt="جبنة بيضاء">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">جبنة بيضاء بلدية</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - جباليا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يومين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">35 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم المطاعم -->
+        <section id="restaurants-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    مطاعم من غزة
+                </h2>
+                <button onclick="openAdModal('مطاعم')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=شاورما" class="w-full h-full object-cover group-hover:scale-105 transition" alt="شاورما">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">شاورما دجاج مميزة</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ ساعة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">15 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=بيتزا" class="w-full h-full object-cover group-hover:scale-105 transition" alt="بيتزا">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">بيتزا مشكل كبيرة</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">35 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=فلافل" class="w-full h-full object-cover group-hover:scale-105 transition" alt="فلافل">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">ساندويش فلافل</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الشيخ رضوان</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 4 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">5 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=كباب" class="w-full h-full object-cover group-hover:scale-105 transition" alt="كباب">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">كباب مشوي مع أرز</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - تل الهوا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">45 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الملابس -->
+        <section id="clothes-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    ملابس من غزة
+                </h2>
+                <button onclick="openAdModal('ملابس')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=فستان+نسائي" class="w-full h-full object-cover group-hover:scale-105 transition" alt="فستان نسائي">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">فستان نسائي صيفي</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الرمال</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">80 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=قميص+رجالي" class="w-full h-full object-cover group-hover:scale-105 transition" alt="قميص رجالي">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">قميص رجالي كلاسيك</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 6 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">65 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=حذاء+رياضي" class="w-full h-full object-cover group-hover:scale-105 transition" alt="حذاء رياضي">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">حذاء رياضي Nike</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الشيخ رضوان</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">150 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=عباية+نسائية" class="w-full h-full object-cover group-hover:scale-105 transition" alt="عباية نسائية">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">عباية نسائية مطرزة</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - تل الهوا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يومين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">120 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم مواد البناء -->
+        <section id="construction-section" class="mb-12 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-cairo font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-brand-500 rounded-full"></span>
+                    مواد بناء من غزة
+                </h2>
+                <button onclick="openAdModal('مواد بناء')" class="section-toggle-btn bg-brand-600 hover:bg-brand-700 text-white text-sm font-cairo font-bold px-4 py-2 rounded-lg shadow flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    إضافة إعلان
+                </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=أسمنت" class="w-full h-full object-cover group-hover:scale-105 transition" alt="أسمنت">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">أسمنت - كيس 50 كغ</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - المنطقة الصناعية</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 4 ساعات</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">35 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=حديد+تسليح" class="w-full h-full object-cover group-hover:scale-105 transition" alt="حديد تسليح">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">حديد تسليح 12مم</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - الزيتون</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يوم</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">4,200 ₪/طن</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=بلاط" class="w-full h-full object-cover group-hover:scale-105 transition" alt="بلاط">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">بلاط أرضيات فاخر</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - النصر</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ يومين</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">45 ₪/م²</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                    <div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x200/e2e8f0/475569?text=طوب" class="w-full h-full object-cover group-hover:scale-105 transition" alt="طوب">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1">طوب بناء - 1000 حبة</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">📍 غزة - جباليا</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">⏱ منذ 3 أيام</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-brand-600 dark:text-brand-400 font-bold text-sm">1,800 ₪</span>
+                            <button onclick="triggerPurchase()" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded">اطلب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -457,7 +831,7 @@
         </div>
     </footer>
 
-    <!-- شاشة منبثقة تفاعلية للطلب (Modal) -->
+    <!-- شاشة منبثقة: تأكيد الطلب -->
     <div id="purchaseModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
         <div class="bg-white dark:bg-dark-surface w-full max-w-md rounded-2xl shadow-2xl p-6 mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
             <div class="flex justify-between items-center mb-5">
@@ -468,14 +842,13 @@
             </div>
             
             <div class="flex items-center gap-4 mb-6 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <img src="https://placehold.co/80x80/f8fafc/1e293b?text=خلاط" class="w-16 h-16 rounded object-cover">
+                <img src="https://placehold.co/80x80/f8fafc/1e293b?text=منتج" class="w-16 h-16 rounded object-cover">
                 <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">خلاط تيربو بلس الاحترافي</h4>
-                    <div class="text-brand-600 dark:text-brand-400 font-bold">199 ₪</div>
+                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">اسم المنتج</h4>
+                    <div class="text-brand-600 dark:text-brand-400 font-bold">-- ₪</div>
                 </div>
             </div>
 
-            <!-- نموذج وهمي -->
             <form onsubmit="submitForm(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">الاسم الكامل</label>
@@ -495,27 +868,175 @@
                         <span>تأكيد الطلب (الدفع عند الاستلام)</span>
                     </button>
                 </div>
-                <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
-                    بالنقر على تأكيد، سيقوم مندوبنا بالتواصل معك لتأكيد الشحن.
-                </p>
             </form>
         </div>
     </div>
 
-    <!-- رسالة نجاح مخصصة (Custom Toast/Alert) -->
-    <div id="toastMessage" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-lg shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-[110]">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-        <span id="toastText" class="font-cairo font-bold">تم استلام طلبك بنجاح! سنتواصل معك قريباً.</span>
+    <!-- شاشة منبثقة: إضافة إعلان -->
+    <div id="adModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white dark:bg-dark-surface w-full max-w-lg rounded-2xl shadow-2xl p-6 mx-4 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto hide-scrollbar" id="adModalContent">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-2xl font-cairo font-bold text-gray-900 dark:text-white">إضافة إعلان جديد</h3>
+                <button onclick="closeAdModal()" class="text-gray-500 hover:text-red-500 transition focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="mb-5 bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-900/40 rounded-lg p-3 flex items-center gap-3">
+                <svg class="w-5 h-5 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                <span class="text-sm font-cairo font-bold text-brand-700 dark:text-brand-400">القسم: <span id="selectedCategory">عام</span></span>
+            </div>
+
+            <form onsubmit="submitAd(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">اسم الإعلان <span class="text-red-500">*</span></label>
+                    <input type="text" id="adTitle" required placeholder="مثال: تويوتا كورولا 2019 بحالة ممتازة" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">صورة الإعلان <span class="text-red-500">*</span></label>
+                    <div class="image-upload-area rounded-lg p-4 text-center cursor-pointer" onclick="document.getElementById('adImage').click()">
+                        <input type="file" id="adImage" accept="image/*" class="hidden" onchange="previewImage(event)">
+                        <div id="uploadPlaceholder">
+                            <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 font-cairo">اضغط لاختيار صورة من جهازك</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">PNG, JPG, JPEG (حتى 5MB)</p>
+                        </div>
+                        <img id="imagePreview" class="hidden w-full h-40 object-cover rounded-lg" alt="معاينة الصورة">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">سعر الإعلان (₪) <span class="text-red-500">*</span></label>
+                    <input type="number" id="adPrice" required min="0" step="0.01" placeholder="مثال: 45000" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">مكان صاحب الإعلان <span class="text-red-500">*</span></label>
+                    <input type="text" id="adLocation" required placeholder="مثال: غزة - الرمال" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">تاريخ الإعلان <span class="text-red-500">*</span></label>
+                    <input type="date" id="adDate" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">اسم صاحب المشترك <span class="text-red-500">*</span></label>
+                    <input type="text" id="adSubscriber" required placeholder="مثال: أحمد محمد" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeAdModal()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-bold py-3 px-4 rounded-xl transition">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl shadow transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        نشر الإعلان
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- شاشة منبثقة: إنشاء حساب جديد -->
+    <div id="signupModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white dark:bg-dark-surface w-full max-w-lg rounded-2xl shadow-2xl p-6 mx-4 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto hide-scrollbar" id="signupModalContent">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-2xl font-cairo font-bold text-gray-900 dark:text-white">إنشاء حساب جديد</h3>
+                <button onclick="closeSignupModal()" class="text-gray-500 hover:text-red-500 transition focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="mb-5 bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-900/40 rounded-lg p-3 flex items-center gap-3">
+                <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                <span class="text-sm font-cairo text-brand-700 dark:text-brand-400">انضم إلى سوق غزة واستفد من خدماتنا المميزة</span>
+            </div>
+
+            <form onsubmit="submitSignup(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">الاسم الكامل <span class="text-red-500">*</span></label>
+                    <input type="text" id="signupName" required minlength="3" placeholder="مثال: أحمد محمد علي" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">البريد الإلكتروني <span class="text-red-500">*</span></label>
+                    <input type="email" id="signupEmail" required dir="ltr" placeholder="example@email.com" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition text-right">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">كلمة المرور <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input type="password" id="signupPassword" required minlength="8" placeholder="8 أحرف على الأقل (حرف + رقم)" class="w-full px-4 py-2 pl-11 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                        <button type="button" onclick="togglePassword('signupPassword', this)" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-600 transition">
+                            <svg class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </button>
+                    </div>
+                    <p id="passwordHint" class="text-xs text-gray-500 dark:text-gray-400 mt-1">يجب أن تحتوي على 8 أحرف على الأقل، وتشمل حرفاً ورقماً</p>
+                    <p id="passwordError" class="hidden text-xs text-red-500 mt-1 font-bold"></p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">تأكيد كلمة المرور <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input type="password" id="signupConfirmPassword" required minlength="8" placeholder="أعد إدخال كلمة المرور" class="w-full px-4 py-2 pl-11 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                        <button type="button" onclick="togglePassword('signupConfirmPassword', this)" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-600 transition">
+                            <svg class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </button>
+                    </div>
+                    <p id="confirmPasswordError" class="hidden text-xs text-red-500 mt-1 font-bold"></p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">المدينة <span class="text-red-500">*</span></label>
+                    <select id="signupCity" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition cursor-pointer">
+                        <option value="">-- اختر مدينتك --</option>
+                        <option value="غزة">غزة</option>
+                        <option value="شمال غزة">شمال غزة</option>
+                        <option value="دير البلح">دير البلح</option>
+                        <option value="خان يونس">خان يونس</option>
+                        <option value="رفح">رفح</option>
+                        <option value="جباليا">جباليا</option>
+                        <option value="بيت لاهيا">بيت لاهيا</option>
+                        <option value="بيت حانون">بيت حانون</option>
+                        <option value="المغازي">المغازي</option>
+                        <option value="البريج">البريج</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="flex items-start gap-2">
+                    <input type="checkbox" id="signupTerms" required class="mt-1 w-4 h-4 text-brand-600 bg-gray-100 border-gray-300 rounded focus:ring-brand-500 dark:focus:ring-brand-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer">
+                    <label for="signupTerms" class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+                        أوافق على <a href="#" class="text-brand-600 dark:text-brand-400 font-bold hover:underline">الشروط والأحكام</a> و <a href="#" class="text-brand-600 dark:text-brand-400 font-bold hover:underline">سياسة الخصوصية</a>
+                    </label>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeSignupModal()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-bold py-3 px-4 rounded-xl transition">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl shadow transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                        إنشاء حساب
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- رسالة نجاح -->
+    <div id="toastMessage" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-lg shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-[110] max-w-sm">
+        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastText" class="font-cairo font-bold text-sm">تم استلام طلبك بنجاح!</span>
     </div>
 
     <script>
-        // 1. نظام الوضع الليلي (Dark Mode)
+        // 1. نظام الوضع الليلي
         const themeToggleBtn = document.getElementById('themeToggle');
-        const sunIcon = document.getElementById('sunIcon');
-        const moonIcon = document.getElementById('moonIcon');
         const html = document.documentElement;
 
-        // التحقق من التفضيل المحفوظ أو تفضيل النظام
         function initTheme() {
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 html.classList.add('dark');
@@ -535,53 +1056,12 @@
             }
         });
 
-        // 2. تبديل الصور الرئيسية
-        function changeImage(element, src) {
-            const mainImg = document.getElementById('mainImage');
-            mainImg.style.opacity = 0;
-            setTimeout(() => {
-                mainImg.src = src;
-                mainImg.style.opacity = 1;
-            }, 150);
-            
-            // تحديث الإطار للزر النشط
-            document.querySelectorAll('.overflow-hidden.border-brand-500').forEach(el => {
-                el.classList.remove('border-brand-500');
-                el.classList.add('border-transparent');
-            });
-            element.classList.remove('border-transparent');
-            element.classList.add('border-brand-500');
-        }
-
-        // 3. نظام الأكورديون (FAQ)
-        const accordions = document.querySelectorAll('.accordion-header');
-        
-        accordions.forEach(acc => {
-            acc.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                const icon = this.querySelector('.accordion-icon');
-                
-                // إغلاق البقية (اختياري)
-                accordions.forEach(otherAcc => {
-                    if (otherAcc !== this) {
-                        otherAcc.nextElementSibling.classList.remove('active');
-                        otherAcc.querySelector('.accordion-icon').classList.remove('active');
-                    }
-                });
-
-                // تبديل الحالي
-                content.classList.toggle('active');
-                icon.classList.toggle('active');
-            });
-        });
-
-        // 5. نظام الشاشة المنبثقة للطلب (Modal)
+        // 2. نافذة تأكيد الطلب
         const modal = document.getElementById('purchaseModal');
         const modalContent = document.getElementById('modalContent');
 
         function triggerPurchase() {
             modal.classList.remove('hidden');
-            // تأخير بسيط للسماح للمتصفح برسم العنصر قبل تطبيق تأثير الشفافية والحجم
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modalContent.classList.remove('scale-95');
@@ -595,44 +1075,220 @@
             modalContent.classList.add('scale-95');
             setTimeout(() => {
                 modal.classList.add('hidden');
-            }, 300); // يتوافق مع مدة الـ transition
+            }, 300);
         }
 
-        // إغلاق عند النقر خارج المربع
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
+            if (e.target === modal) closeModal();
         });
 
-        // 6. معالجة نموذج الطلب الوهمي ورسالة النجاح (Toast)
         function submitForm(e) {
-            e.preventDefault(); // منع إعادة تحميل الصفحة
-            
-            // إغلاق المودال
+            e.preventDefault(); 
             closeModal();
-            
-            // إظهار رسالة النجاح
-            showToast("تم تسجيل طلبك بنجاح! سيتم التواصل معك عبر الواتساب لتأكيد الشحن.");
-            
-            // إعادة تعيين النموذج
+            showToast("تم تسجيل طلبك بنجاح! سيتم التواصل معك عبر الواتساب.");
             e.target.reset();
         }
 
+        // 3. نافذة إضافة الإعلان
+        const adModal = document.getElementById('adModal');
+        const adModalContent = document.getElementById('adModalContent');
+        const selectedCategorySpan = document.getElementById('selectedCategory');
+
+        function openAdModal(category) {
+            selectedCategorySpan.textContent = category || 'عام';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('adDate').value = today;
+
+            adModal.classList.remove('hidden');
+            setTimeout(() => {
+                adModal.classList.remove('opacity-0');
+                adModalContent.classList.remove('scale-95');
+                adModalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeAdModal() {
+            adModal.classList.add('opacity-0');
+            adModalContent.classList.remove('scale-100');
+            adModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                adModal.classList.add('hidden');
+                document.getElementById('imagePreview').classList.add('hidden');
+                document.getElementById('uploadPlaceholder').classList.remove('hidden');
+                document.getElementById('imagePreview').src = '';
+            }, 300);
+        }
+
+        adModal.addEventListener('click', (e) => {
+            if (e.target === adModal) closeAdModal();
+        });
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    const placeholder = document.getElementById('uploadPlaceholder');
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function submitAd(e) {
+            e.preventDefault();
+
+            const adData = {
+                title: document.getElementById('adTitle').value,
+                price: document.getElementById('adPrice').value,
+                location: document.getElementById('adLocation').value,
+                date: document.getElementById('adDate').value,
+                subscriber: document.getElementById('adSubscriber').value,
+                category: selectedCategorySpan.textContent,
+                image: document.getElementById('imagePreview').src || 'لا توجد صورة'
+            };
+
+            console.log('بيانات الإعلان الجديد:', adData);
+
+            closeAdModal();
+            showToast("✅ تم نشر إعلانك بنجاح! سيظهر في القسم المحدد بعد المراجعة.");
+            
+            e.target.reset();
+            document.getElementById('imagePreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('imagePreview').src = '';
+        }
+
+        // 4. نافذة إنشاء حساب جديد
+        const signupModal = document.getElementById('signupModal');
+        const signupModalContent = document.getElementById('signupModalContent');
+
+        function openSignupModal() {
+            signupModal.classList.remove('hidden');
+            setTimeout(() => {
+                signupModal.classList.remove('opacity-0');
+                signupModalContent.classList.remove('scale-95');
+                signupModalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeSignupModal() {
+            signupModal.classList.add('opacity-0');
+            signupModalContent.classList.remove('scale-100');
+            signupModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                signupModal.classList.add('hidden');
+            }, 300);
+        }
+
+        signupModal.addEventListener('click', (e) => {
+            if (e.target === signupModal) closeSignupModal();
+        });
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('.eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            }
+        }
+
+        document.getElementById('signupPassword').addEventListener('input', function() {
+            const password = this.value;
+            const errorEl = document.getElementById('passwordError');
+            const hasLetter = /[A-Za-z\u0600-\u06FF]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasMinLength = password.length >= 8;
+
+            if (password.length === 0) {
+                errorEl.classList.add('hidden');
+                return;
+            }
+
+            if (!hasMinLength || !hasLetter || !hasNumber) {
+                errorEl.textContent = '⚠ كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف ورقم';
+                errorEl.classList.remove('hidden');
+            } else {
+                errorEl.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('signupConfirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = this.value;
+            const errorEl = document.getElementById('confirmPasswordError');
+
+            if (confirmPassword.length === 0) {
+                errorEl.classList.add('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorEl.textContent = '⚠ كلمتا المرور غير متطابقتين';
+                errorEl.classList.remove('hidden');
+            } else {
+                errorEl.classList.add('hidden');
+            }
+        });
+
+        function submitSignup(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const city = document.getElementById('signupCity').value;
+
+            const hasLetter = /[A-Za-z\u0600-\u06FF]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            if (password.length < 8 || !hasLetter || !hasNumber) {
+                showToast('⚠ كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف ورقم');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showToast('⚠ كلمتا المرور غير متطابقتين');
+                return;
+            }
+
+            const signupData = { name, email, city };
+            console.log('بيانات الحساب الجديد:', signupData);
+
+            closeSignupModal();
+            showToast("✅ تم إنشاء حسابك بنجاح! مرحباً بك في سوق غزة 🎉");
+            
+            e.target.reset();
+        }
+
+        // 5. رسالة Toast
         function showToast(message) {
             const toast = document.getElementById('toastMessage');
             const toastText = document.getElementById('toastText');
             
             toastText.innerText = message;
-            
-            // إظهار
             toast.classList.remove('translate-y-20', 'opacity-0');
             
-            // إخفاء بعد 4 ثواني
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 4000);
         }
+
+        // 6. إغلاق بـ Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!modal.classList.contains('hidden')) closeModal();
+                if (!adModal.classList.contains('hidden')) closeAdModal();
+                if (!signupModal.classList.contains('hidden')) closeSignupModal();
+            }
+        });
     </script>
 </body>
 </html>
