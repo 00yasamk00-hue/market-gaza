@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سوق غزة | Gaza Market</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- إعدادات Tailwind المخصصة مع مراعاة قاعدة 60-30-10 -->
+<!-- 60% اللون السائد للخلفيات والراحة البصرية: gray-50 و dark:bg-[#0f172a] -->
+<!-- 30% اللون البنائي للكروت والنوافذ والجداول: white و dark:bg-[#1e293b] وحواف متوازنة -->
+<!-- 10% لون التمييز والتفاعل (Accent): أخضر الزمرد brand-500 للتفاعل والأزرار والشارات الأساسية -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        cairo: ['Cairo', 'sans-serif'],
+        tajawal: ['Tajawal', 'sans-serif']
+      },
+      colors: {
+        brand: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d'
+        },
+        dark: {
+          bg: '#0f172a',      /* 60% Dominant Background */
+          surface: '#1e293b', /* 30% Structural Elements */
+          border: '#334155'
+        }
+      }
+    }
+  }
+}
+</script>
+
+<!-- الخطوط -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- ==================== Styles ==================== -->
+<style>
+body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s, color 0.3s; }
+h1, h2, h3, h4, h5, h6, .font-cairo { font-family: 'Cairo', sans-serif; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+.dark ::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #16a34a; }
+
+.fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.image-upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s ease; }
+.image-upload-area:hover { border-color: #22c55e; background-color: #f0fdf4; }
+.dark .image-upload-area { border-color: #475569; }
+.dark .image-upload-area:hover { border-color: #22c55e; background-color: rgba(34, 197, 94, 0.05); }
+
+.admin-table th { background-color: #f8fafc; }
+.dark .admin-table th { background-color: #1e293b; }
+.admin-table tr:hover { background-color: #f8fafc; }
+.dark .admin-table tr:hover { background-color: rgba(51, 65, 85, 0.4); }
+.admin-tab-active { background-color: #16a34a; color: white !important; }
+.dark .admin-tab-active { background-color: #15803d; color: white !important; }
+
+.visual-alert {
+  position: fixed; top: 85px; left: 50%; transform: translateX(-50%);
+  z-index: 300; padding: 14px 22px; border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  font-family: 'Cairo', sans-serif; font-weight: bold;
+  display: flex; align-items: center; gap: 12px;
+  animation: slideDown 0.4s ease-out; max-width: 90%;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.visual-alert-success { background: #16a34a; color: white; }
+.visual-alert-warning { background: #f59e0b; color: white; }
+.visual-alert-info { background: #0284c7; color: white; }
+.visual-alert-danger { background: #dc2626; color: white; }
+
+*:focus-visible { outline: 2px solid #16a34a; outline-offset: 2px; }
+
+.wholesale-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white; font-size: 10px; font-weight: bold;
+  padding: 2px 8px; border-radius: 999px; font-family: 'Cairo', sans-serif;
+}
+
+.zone-card { transition: all 0.25s ease; cursor: pointer; }
+.zone-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(34, 197, 94, 0.12); }
+.zone-card.selected {
+  border-color: #16a34a; background-color: rgba(34, 197, 94, 0.08);
+  box-shadow: 0 0 0 2px #16a34a;
+}
+.dark .zone-card.selected { background-color: rgba(34, 197, 94, 0.15); }
+
+/* Drag & Drop Area */
+.dropzone-active {
+  border-color: #22c55e !important;
+  background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+button { cursor: pointer; font-family: inherit; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+</head>
+
+<body class="font-tajawal bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+
+<!-- مؤشر التحميل الأولي لقاعدة البيانات IndexedDB -->
+<div id="dbLoadingIndicator" class="fixed inset-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-sm flex items-center justify-center flex-col gap-3 transition-opacity">
+  <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
+  <p class="font-cairo font-bold text-gray-700 dark:text-gray-200 text-sm">جاري تهيئة قاعدة بيانات IndexedDB...</p>
+</div>
+
+<!-- ==================== الرأس (Header) ==================== -->
+<header class="sticky top-0 z-40 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border shadow-sm">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center py-3">
+
+      <a href="#" onclick="goHome();return false" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 bg-brand-500 group-hover:bg-brand-600 transition text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">س</div>
+        <div>
+          <span class="font-cairo font-extrabold text-2xl text-brand-600 dark:text-brand-400 leading-none block">سوق غزة</span>
+          <span class="text-[10px] text-gray-400 font-bold tracking-wider">GAZA MARKET</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+
+        <!-- تبديل المظهر -->
+        <button id="themeToggle" class="p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" aria-label="تبديل الوضع">
+          <svg class="w-5 h-5 hidden dark:block text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>
+          <svg class="w-5 h-5 dark:hidden text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+        </button>
+
+        <!-- نافذة الدليفري -->
+        <button class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" onclick="openDeliveryModal()" aria-label="شركات الدليفري">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"/></svg>
+          <span class="absolute top-1.5 left-1.5 w-2.5 h-2.5 bg-brand-500 rounded-full ring-2 ring-white dark:ring-dark-surface"></span>
+        </button>
+
+        <!-- زر النسخ الاحتياطي السريع (Export/Import) في الهيدر للوصول السريع -->
+        <button onclick="openBackupDirectModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-cairo font-bold bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded-xl hover:bg-brand-100 dark:hover:bg-brand-900/50 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+          <span>تصدير / استيراد</span>
+        </button>
+
+        <!-- القائمة المنسدلة -->
+        <div class="relative group">
+          <button class="p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" aria-label="القائمة">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="absolute left-0 top-full mt-2 w-60 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden divide-y divide-gray-100 dark:divide-dark-border">
+            <div class="py-1">
+              <button onclick="openAdminModal()" class="w-full text-right px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
+                <span class="text-base">⚙️</span> لوحة الأدمن والإدارة
+              </button>
+              <button onclick="openWholesaleModal()" class="w-full text-right px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
+                <span class="text-base">🏢</span> بوابة الجملة B2B
+              </button>
+              <button onclick="openDeliveryZoneModal()" class="w-full text-right px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
+                <span class="text-base">🗺️</span> مناطق التوصيل بغزة
+              </button>
+            </div>
+            <div class="py-1">
+              <button onclick="openSignupModal()" class="w-full text-right px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
+                <span class="text-base">👤</span> الدخول / التسجيل
+              </button>
+              <button onclick="openBackupDirectModal()" class="w-full text-right px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-3 text-sm text-brand-600 dark:text-brand-400 font-bold">
+                <span class="text-base">💾</span> النسخ الاحتياطي (IndexedDB)
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== المحتوى الرئيسي (Main) ==================== -->
+<main class="flex-grow py-6">
+  <div class="max-w-7xl mx-auto px-4">
+
+    <!-- الصفحة الرئيسية -->
+    <div id="homePage" class="fade-in">
+      <div class="relative max-w-2xl mx-auto mb-8">
+        <input type="text" id="searchInput" placeholder="ابحث عن سيارات، عقارات، هواتف، أسمنت، أو أي شيء في غزة..." class="w-full py-4 pr-5 pl-14 rounded-2xl border border-gray-200 dark:border-dark-border bg-white dark:bg-dark-surface text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 shadow-sm transition" onkeydown="if(event.key==='Enter')performSearch()">
+        <button onclick="performSearch()" class="absolute left-2.5 top-1/2 -translate-y-1/2 p-2.5 bg-brand-500 text-white rounded-xl hover:bg-brand-600 transition shadow-sm" aria-label="بحث">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+      </div>
+
+      <div class="mb-10">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-cairo text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+            <span class="w-2.5 h-6 bg-brand-500 rounded-full"></span>
+            تصفح أقسام سوق غزة
+          </h2>
+          <span id="totalAdsCounterBadge" class="text-xs font-cairo font-bold bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">جاري الحساب...</span>
+        </div>
+        <div id="categoriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+      </div>
+    </div>
+
+    <!-- صفحة القسم -->
+    <div id="categoryPage" class="hidden fade-in">
+      <div class="flex justify-between items-center flex-wrap gap-3 mb-6 bg-white dark:bg-dark-surface p-4 rounded-2xl border border-gray-200 dark:border-dark-border">
+        <button onclick="goHome()" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-dark-border rounded-xl font-cairo font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition">
+          <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          الرئيسية
+        </button>
+        <button onclick="openAdModalFromCategory()" class="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-md shadow-brand-500/20 transition">+ إضافة إعلان بالقسم</button>
+      </div>
+      <div class="mb-5 flex items-center justify-between">
+        <h2 class="font-cairo text-2xl font-bold flex items-center gap-3">
+          <span id="categoryPageName">القسم</span>
+          <span id="categoryPageCount" class="text-sm font-bold text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-900/40 px-3 py-1 rounded-full"></span>
+        </h2>
+      </div>
+      <div id="categoryPageGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+      <div id="categoryEmptyMsg" class="hidden text-center py-20 bg-white dark:bg-dark-surface rounded-2xl border border-gray-200 dark:border-dark-border">
+        <div class="text-5xl mb-3">📭</div>
+        <p class="text-lg text-gray-600 dark:text-gray-300 font-bold mb-1">لا توجد إعلانات في هذا القسم بعد</p>
+        <p class="text-sm text-gray-400">كن أول من ينشر إعلاناً هنا!</p>
+      </div>
+    </div>
+
+    <!-- صفحة البحث -->
+    <div id="searchResults" class="hidden fade-in">
+      <div class="flex justify-between items-center flex-wrap gap-3 mb-5">
+        <button onclick="clearSearch()" class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl font-cairo font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition">← العودة للرئيسية</button>
+      </div>
+      <h2 class="font-cairo text-xl font-bold mb-5">نتائج البحث: <span id="searchQueryDisplay" class="text-brand-600"></span> <span id="searchCount" class="text-sm font-normal text-gray-500"></span></h2>
+      <div id="searchResultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+      <div id="noResultsMsg" class="hidden text-center py-20 bg-white dark:bg-dark-surface rounded-2xl border border-gray-200 dark:border-dark-border">
+        <div class="text-5xl mb-3">🔍</div>
+        <p class="text-lg text-gray-600 dark:text-gray-300 font-bold">لا توجد نتائج مطابقة لبحثك</p>
+        <p class="text-sm text-gray-400 mt-1">جرّب استخدام كلمات أخرى أو تصفح الأقسام مباشرة</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ==================== التذييل (Footer) ==================== -->
+<footer class="bg-gray-900 dark:bg-black text-gray-400 py-8 text-center mt-auto border-t-2 border-brand-500/30">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="font-cairo text-white text-xl font-bold mb-2 flex items-center justify-center gap-2">
+      <span class="w-6 h-6 bg-brand-500 rounded text-sm flex items-center justify-center font-bold">س</span>
+      سوق غزة (Gaza Market)
+    </div>
+    <p class="text-xs sm:text-sm mb-4 max-w-xl mx-auto text-gray-400">السوق الإلكتروني الشامل في قطاع غزة. تخزين آمن محلي بتقنية IndexedDB وسرعة فائقة دون الاعتماد على خوادم خارجية.</p>
+    <div class="inline-flex items-center gap-3 text-xs text-brand-400 bg-gray-800/80 px-4 py-2 rounded-full font-bold">
+      <span>قاعدة بيانات نشطة: IndexedDB ⚡</span>
+      <span>•</span>
+      <span>2026 جميع الحقوق محفوظة</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== نافذة تأكيد الطلب وحفظ بيانات الشاري (Purchases / Buyers) ==================== -->
+<div id="purchaseModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="purchaseModalContent" class="bg-white dark:bg-dark-surface w-full max-w-md rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5 border-b border-gray-100 dark:border-dark-border pb-3">
+      <div>
+        <h3 class="font-cairo text-2xl font-bold text-gray-900 dark:text-white">تأكيد طلب الشراء</h3>
+        <p class="text-xs text-gray-500">تسجيل بيانات الشاري والدفعات في IndexedDB</p>
+      </div>
+      <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- معلومات المنتج المختار -->
+    <div class="flex gap-4 mb-5 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+      <img id="modalProductImage" src="" class="w-16 h-16 rounded-lg object-cover" alt="">
+      <div class="flex-1 min-w-0">
+        <h4 id="modalProductTitle" class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1 truncate">اسم المنتج</h4>
+        <div id="modalProductPrice" class="text-brand-600 dark:text-brand-400 font-bold text-base">-- ₪</div>
+      </div>
+    </div>
+
+    <form onsubmit="submitOrder(event)">
+      <!-- الاسم الكامل -->
+      <div class="mb-3">
+        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 font-cairo">اسم الشاري الرباعي *</label>
+        <input type="text" id="orderName" required placeholder="مثال: أحمد يوسف خليل الخطيب" class="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+
+      <!-- رقم الهوية -->
+      <div class="mb-3">
+        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 font-cairo">رقم الهوية الفلسطينية (9 أرقام) *</label>
+        <input type="text" id="orderIdNumber" required pattern="[0-9]{9}" maxlength="9" placeholder="مثال: 401234567" class="w-full px-3.5 py-2.5 text-sm font-mono border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500" title="يرجى كتابة رقم هوية مكون من 9 أرقام">
+      </div>
+
+      <!-- رقم الهاتف -->
+      <div class="mb-3">
+        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 font-cairo">رقم الهاتف أو الجوال *</label>
+        <input type="tel" id="orderPhone" required dir="ltr" placeholder="059xxxxxxx أو 056xxxxxxx" class="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+
+      <!-- منطقة التوصيل -->
+      <div class="mb-3">
+        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 font-cairo">منطقة التوصيل *</label>
+        <select id="orderZone" onchange="updateOrderTotal()" required class="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+          <option value="">-- اختر منطقة التوصيل --</option>
+        </select>
+      </div>
+
+      <!-- العنوان التفصيلي -->
+      <div class="mb-4">
+        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 font-cairo">العنوان بالتفصيل *</label>
+        <input type="text" id="orderAddress" required placeholder="الشارع، بجوار معلم معروف، الحي..." class="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+
+      <!-- ملخص الدفعة المالية -->
+      <div class="bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded-xl p-3.5 mb-5 font-cairo">
+        <div class="flex justify-between text-xs text-gray-600 dark:text-gray-300 mb-1.5">
+          <span>سعر الإعلان:</span>
+          <span id="orderProductPrice" class="font-bold">0 ₪</span>
+        </div>
+        <div class="flex justify-between text-xs text-gray-600 dark:text-gray-300 mb-1.5">
+          <span>رسوم التوصيل:</span>
+          <span id="orderDeliveryCost" class="font-bold">0 ₪</span>
+        </div>
+        <div class="flex justify-between text-base font-bold pt-2 border-t border-brand-200 dark:border-brand-800 text-gray-900 dark:text-white">
+          <span>إجمالي الدفعة المستحقة:</span>
+          <span id="orderTotal" class="text-brand-600 dark:text-brand-400">0 ₪</span>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-lg shadow-brand-500/25 transition">
+        تأكيد الطلب وتسجيل الدفعة
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== نافذة إضافة / تعديل إعلان ==================== -->
+<div id="adModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="adModalContent" class="bg-white dark:bg-dark-surface w-full max-w-lg rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5">
+      <h3 id="adModalTitle" class="font-cairo text-2xl font-bold text-gray-900 dark:text-white">إضافة إعلان جديد</h3>
+      <button onclick="closeAdModal()" class="text-gray-500 hover:text-red-500 transition p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="bg-brand-50 dark:bg-brand-900/20 p-3 rounded-xl mb-4 text-sm font-cairo">
+      القسم: <span id="selectedCategory" class="font-bold text-brand-600 dark:text-brand-400">عام</span>
+    </div>
+    <form onsubmit="submitAd(event)">
+      <input type="hidden" id="adEditId">
+      <div id="adminCategoryWrapper" class="hidden mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">القسم *</label>
+        <select id="adminCategorySelect" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white"></select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">اسم الإعلان *</label>
+        <input type="text" id="adTitle" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">صورة الإعلان *</label>
+        <input type="file" id="adImage" accept="image/*" class="hidden" onchange="previewImage(event)">
+        <div onclick="document.getElementById('adImage').click()" class="image-upload-area rounded-xl p-4 text-center cursor-pointer">
+          <div id="uploadPlaceholder" class="text-gray-500 dark:text-gray-400">📷 اضغط لاختيار صورة من جهازك</div>
+          <img id="imagePreview" class="hidden w-full h-44 object-cover rounded-lg">
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">السعر (₪) *</label>
+          <input type="number" id="adPrice" required min="0" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">التاريخ *</label>
+          <input type="date" id="adDate" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">المكان (المنطقة) *</label>
+        <input type="text" id="adLocation" required placeholder="غزة - الرمال / خان يونس..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+      <div class="mb-5">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">اسم المعلن / المشترك *</label>
+        <input type="text" id="adSubscriber" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+      <div class="flex gap-3">
+        <button type="button" onclick="closeAdModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl font-cairo font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition">إلغاء</button>
+        <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-md transition"><span id="adSubmitText">نشر الإعلان</span></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== نافذة التسجيل ==================== -->
+<div id="signupModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="signupModalContent" class="bg-white dark:bg-dark-surface w-full max-w-lg rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="font-cairo text-2xl font-bold text-gray-900 dark:text-white">إنشاء حساب جديد</h3>
+      <button onclick="closeSignupModal()" class="text-gray-500 hover:text-red-500 p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form onsubmit="submitSignup(event)">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">الاسم الكامل *</label>
+        <input type="text" id="signupName" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">البريد الإلكتروني *</label>
+        <input type="email" id="signupEmail" required dir="ltr" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">كلمة المرور *</label>
+        <input type="password" id="signupPassword" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+        <p id="passwordError" class="hidden text-xs text-red-600 mt-1"></p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">تأكيد كلمة المرور *</label>
+        <input type="password" id="signupConfirmPassword" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500">
+        <p id="confirmPasswordError" class="hidden text-xs text-red-600 mt-1"></p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">المدينة *</label>
+        <select id="signupCity" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          <option value="">-- اختر المحافظة --</option>
+          <option>غزة</option><option>شمال غزة</option><option>دير البلح</option>
+          <option>خان يونس</option><option>رفح</option><option>جباليا</option>
+          <option>بيت لاهيا</option><option>بيت حانون</option><option>أخرى</option>
+        </select>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <button type="button" onclick="closeSignupModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl font-cairo font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition">إلغاء</button>
+        <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-md transition">إنشاء حساب</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== نافذة الدليفري ==================== -->
+<div id="deliveryModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="deliveryModalContent" class="bg-white dark:bg-dark-surface w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="font-cairo text-2xl font-bold text-gray-900 dark:text-white">🚚 شركات الدليفري في غزة</h3>
+      <button onclick="closeDeliveryModal()" class="text-gray-500 hover:text-red-500 p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="deliveryList"></div>
+  </div>
+</div>
+
+<!-- ==================== لوحة الأدمن والتحكم الكامل ==================== -->
+<div id="adminModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="adminModalContent" class="bg-white dark:bg-dark-surface w-full max-w-6xl rounded-2xl shadow-2xl max-h-[95vh] flex flex-col scale-95 transition-transform overflow-hidden border border-gray-200 dark:border-dark-border">
+    <div class="bg-gradient-to-l from-brand-600 to-brand-800 text-white p-5 flex justify-between items-center">
+      <div>
+        <h3 class="font-cairo text-xl font-bold flex items-center gap-2">
+          <span>⚙️</span> لوحة إدارة سوق غزة الشاملة
+        </h3>
+        <p class="text-xs text-brand-100 mt-0.5">إدارة كاملة لقاعدة بيانات IndexedDB (الإعلانات، المشترين، والنسخ الاحتياطي)</p>
+      </div>
+      <button onclick="closeAdminModal()" class="text-white/80 hover:text-white p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- بطاقات الإحصائيات (قاعدة 30% أسطح) -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-dark-border">
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">الإعلانات</div>
+        <div id="statAds" class="text-2xl font-black text-brand-600">0</div>
+      </div>
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">المشترين</div>
+        <div id="statBuyers" class="text-2xl font-black text-blue-600">0</div>
+      </div>
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">إجمالي الدفعات</div>
+        <div id="statPayments" class="text-2xl font-black text-brand-600">0 ₪</div>
+      </div>
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">الأقسام</div>
+        <div id="statCategories" class="text-2xl font-black text-brand-600">0</div>
+      </div>
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">الدليفري</div>
+        <div id="statDelivery" class="text-2xl font-black text-brand-600">0</div>
+      </div>
+      <div class="bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 font-cairo">المستخدمين</div>
+        <div id="statUsers" class="text-2xl font-black text-brand-600">0</div>
+      </div>
+    </div>
+
+    <!-- أزرار التبويبات -->
+    <div class="flex border-b border-gray-200 dark:border-dark-border overflow-x-auto bg-gray-100/60 dark:bg-gray-800/40">
+      <button id="tabAds" onclick="switchAdminTab('ads')" class="admin-tab admin-tab-active px-5 py-3 font-cairo font-bold text-sm whitespace-nowrap">📦 الإعلانات</button>
+      <button id="tabBuyers" onclick="switchAdminTab('buyers')" class="admin-tab px-5 py-3 font-cairo font-bold text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">👤 المشترين والدفعات</button>
+      <button id="tabBackup" onclick="switchAdminTab('backup')" class="admin-tab px-5 py-3 font-cairo font-bold text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">💾 استيراد وتصدير</button>
+      <button id="tabCategories" onclick="switchAdminTab('categories')" class="admin-tab px-5 py-3 font-cairo font-bold text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">🏷️ الأقسام</button>
+      <button id="tabDelivery" onclick="switchAdminTab('delivery')" class="admin-tab px-5 py-3 font-cairo font-bold text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">🚚 الدليفري</button>
+      <button id="tabUsers" onclick="switchAdminTab('users')" class="admin-tab px-5 py-3 font-cairo font-bold text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">👥 المستخدمين</button>
+    </div>
+
+    <!-- محتويات التبويبات -->
+    <div class="flex-1 overflow-y-auto p-4">
+
+      <!-- تبويب الإعلانات -->
+      <div id="adminTabAds" class="admin-tab-content">
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <button onclick="openAdModalForAdmin()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold text-sm">+ إضافة إعلان</button>
+          <select id="filterCategory" onchange="renderAdminAds()" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm">
+            <option value="">كل الأقسام</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-dark-border">
+          <table class="admin-table w-full text-sm">
+            <thead>
+              <tr class="text-right">
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">#</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">الصورة</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">الاسم</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">القسم</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">السعر</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">المكان</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">المشترك</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">التاريخ</th>
+                <th class="px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-400">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="adminAdsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- تبويب المشترين والدفعات (جديد: الاسم، رقم الهوية، الدفعات) -->
+      <div id="adminTabBuyers" class="admin-tab-content hidden">
+        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+          <div class="relative flex-1 min-w-[240px]">
+            <input type="text" id="searchBuyerInput" oninput="renderAdminBuyers()" placeholder="ابحث برقم الهوية، الاسم أو الجوال..." class="w-full py-2 pr-4 pl-10 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:border-brand-500">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+          </div>
+          <button onclick="clearAllBuyersPrompt()" class="px-3 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl font-cairo text-xs font-bold hover:bg-red-100 transition">
+            مسح سجل المشترين
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-dark-border">
+          <table class="admin-table w-full text-sm">
+            <thead>
+              <tr class="text-right">
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">رقم الهوية</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">اسم الشاري</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">رقم الهاتف</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">المنطقة والعنوان</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">عدد الطلبات</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400">إجمالي الدفعات</th>
+                <th class="px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-400 text-center">التفاصيل</th>
+              </tr>
+            </thead>
+            <tbody id="adminBuyersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- تبويب التصدير والاستيراد مع أفضل UX (JSON + Drag & Drop + Merge/Overwrite) -->
+      <div id="adminTabBackup" class="admin-tab-content hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- كرت التصدير -->
+          <div class="bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-dark-border rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center font-bold text-lg">
+                  📤
+                </div>
+                <div>
+                  <h4 class="font-cairo font-bold text-base text-gray-900 dark:text-white">تصدير كامل البيانات (Export)</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">حفظ نسخة احتياطية لكافة محتويات IndexedDB بصيغة JSON</p>
+                </div>
+              </div>
+              <ul class="text-xs text-gray-600 dark:text-gray-300 space-y-1.5 my-4 bg-white dark:bg-dark-surface p-3.5 rounded-xl border border-gray-200 dark:border-dark-border">
+                <li class="flex items-center gap-2"><span>✅</span> الإعلانات بالكامل مع الصور</li>
+                <li class="flex items-center gap-2"><span>✅</span> بيانات المشترين وأرقام الهويات وسجل الدفعات</li>
+                <li class="flex items-center gap-2"><span>✅</span> الأقسام المخصصة وشركات التوصيل والمستخدمين</li>
+                <li class="flex items-center gap-2"><span>✅</span> متوافق مع أي متصفح (Chrome, Firefox, Safari, Edge)</li>
+              </ul>
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button onclick="exportDataToFile()" class="flex-1 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+                <span>تنزيل ملف النسخة الاحتياطية (.json)</span>
+              </button>
+              <button onclick="copyDataToClipboard()" class="px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-gray-800 dark:text-gray-200 rounded-xl font-cairo font-bold text-xs transition" title="نسخ البيانات للحافظة">
+                📋 نسخ
+              </button>
+            </div>
+          </div>
+
+          <!-- كرت الاستيراد -->
+          <div class="bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-dark-border rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center font-bold text-lg">
+                  📥
+                </div>
+                <div>
+                  <h4 class="font-cairo font-bold text-base text-gray-900 dark:text-white">استيراد البيانات (Import)</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">استرجاع البيانات ونقلها من أي متصفح أو جهاز آخر</p>
+                </div>
+              </div>
+
+              <!-- منطقة السحب والإفلات UX Dropzone -->
+              <div id="importDropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('importFileInput').click()" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-brand-500 transition-all bg-white dark:bg-dark-surface my-4">
+                <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="handleFileSelect(event)">
+                <div class="text-3xl mb-2">📁</div>
+                <p class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200">اسحب وأفلت ملف الـ JSON هنا</p>
+                <p class="text-xs text-gray-400 mt-1">أو اضغط لاختيار الملف من جهازك</p>
+              </div>
+            </div>
+
+            <!-- خيار الدمج أو الاستبدال -->
+            <div class="flex items-center justify-between text-xs bg-white dark:bg-dark-surface p-3 rounded-xl border border-gray-200 dark:border-dark-border">
+              <span class="font-bold text-gray-700 dark:text-gray-300">وضع الاستيراد:</span>
+              <div class="flex gap-3">
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="importMode" value="merge" checked class="text-brand-500 focus:ring-brand-500">
+                  <span>دمج مع الحالي (Merge)</span>
+                </label>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="importMode" value="overwrite" class="text-red-500 focus:ring-red-500">
+                  <span class="text-red-600 dark:text-red-400">استبدال كامل</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- تبويب الأقسام -->
+      <div id="adminTabCategories" class="admin-tab-content hidden">
+        <button onclick="addCategoryPrompt()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold text-sm mb-4">+ إضافة قسم</button>
+        <div id="adminCategoriesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+      </div>
+
+      <!-- تبويب الدليفري -->
+      <div id="adminTabDelivery" class="admin-tab-content hidden">
+        <button onclick="openDeliveryForm()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold text-sm mb-4">+ إضافة شركة دليفري</button>
+        <div id="adminDeliveryList" class="space-y-3"></div>
+      </div>
+
+      <!-- تبويب المستخدمين -->
+      <div id="adminTabUsers" class="admin-tab-content hidden">
+        <div id="adminUsersList" class="space-y-3"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ==================== نافذة تفاصيل مدفوعات شاري محدد ==================== -->
+<div id="buyerDetailsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="buyerDetailsContent" class="bg-white dark:bg-dark-surface w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-4 border-b border-gray-100 dark:border-dark-border pb-3">
+      <div>
+        <h3 id="buyerModalName" class="font-cairo text-xl font-bold text-gray-900 dark:text-white">تفاصيل الشاري</h3>
+        <p id="buyerModalId" class="text-xs text-brand-600 dark:text-brand-400 font-mono font-bold"></p>
+      </div>
+      <button onclick="closeModalById('buyerDetailsModal')" class="text-gray-500 hover:text-red-500 p-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="mb-4 text-xs text-gray-500 dark:text-gray-400 grid grid-cols-2 gap-2 bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
+      <div>الهاتف: <strong id="buyerModalPhone" class="text-gray-800 dark:text-gray-200"></strong></div>
+      <div>العنوان: <strong id="buyerModalAddress" class="text-gray-800 dark:text-gray-200"></strong></div>
+      <div>إجمالي المشتريات: <strong id="buyerModalTotal" class="text-brand-600 font-bold"></strong></div>
+      <div>عدد الطلبات: <strong id="buyerModalCount" class="text-gray-800 dark:text-gray-200"></strong></div>
+    </div>
+    <h4 class="font-cairo font-bold text-sm mb-2">سجل الدفعات والطلبات:</h4>
+    <div id="buyerPaymentsList" class="space-y-2"></div>
+  </div>
+</div>
+
+<!-- ==================== نافذة نموذج الدليفري ==================== -->
+<div id="deliveryFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="deliveryFormContent" class="bg-white dark:bg-dark-surface w-full max-w-lg rounded-2xl p-6 shadow-2xl scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5">
+      <h3 id="deliveryFormTitle" class="font-cairo text-xl font-bold text-gray-900 dark:text-white">إضافة شركة دليفري</h3>
+      <button onclick="closeDeliveryForm()" class="text-gray-500 hover:text-red-500 p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form onsubmit="submitDeliveryForm(event)">
+      <input type="hidden" id="deliveryEditId">
+      <div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">اسم الشركة *</label><input type="text" id="deliveryName" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500"></div>
+      <div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">الوصف *</label><textarea id="deliveryDesc" required rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500"></textarea></div>
+      <div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">أرقام الهاتف (مفصولة بفواصل) *</label><input type="text" id="deliveryPhones" required dir="ltr" placeholder="0599999999, 0568888888" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500"></div>
+      <div class="mb-4"><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">رقم الواتساب</label><input type="text" id="deliveryWhatsapp" dir="ltr" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500"></div>
+      <div class="flex gap-3">
+        <button type="button" onclick="closeDeliveryForm()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl font-cairo font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition">إلغاء</button>
+        <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-md transition">حفظ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== نافذة الجملة B2B ==================== -->
+<div id="wholesaleModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="wholesaleModalContent" class="bg-white dark:bg-dark-surface w-full max-w-4xl rounded-2xl shadow-2xl max-h-[95vh] flex flex-col scale-95 transition-transform overflow-hidden border border-gray-100 dark:border-dark-border">
+    <div class="bg-gradient-to-l from-amber-500 to-orange-600 text-white p-5 flex justify-between items-center">
+      <div>
+        <h3 class="font-cairo text-xl font-bold">🏢 بوابة الجملة B2B للتجار في غزة</h3>
+        <p class="text-xs text-amber-100">أسعار تفضيلية وخصومات متصاعدة حسب الكميات</p>
+      </div>
+      <button onclick="closeWholesaleModal()" class="text-white/80 hover:text-white p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-5">
+      <div id="wholesaleCategories" class="flex flex-wrap gap-2 mb-5"></div>
+      <div id="wholesaleProductsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+      <div id="wholesaleSummary" class="hidden mt-6 bg-brand-50 dark:bg-brand-900/20 border-2 border-brand-500 rounded-2xl p-5">
+        <div id="wholesaleSummaryItems" class="space-y-2 mb-3"></div>
+        <div class="border-t-2 border-dashed border-brand-300 dark:border-brand-700 pt-3 mt-3">
+          <div class="flex justify-between mb-1"><span>قبل الخصم:</span><span id="wholesaleSubtotal" class="font-bold">0 ₪</span></div>
+          <div class="flex justify-between mb-1"><span>الخصم المستحق:</span><span id="wholesaleDiscount" class="font-bold text-red-600">-0 ₪</span></div>
+          <div class="flex justify-between font-bold text-lg pt-2 border-t border-brand-300 dark:border-brand-700"><span>الإجمالي النهائي:</span><span id="wholesaleTotal" class="text-brand-600">0 ₪</span></div>
+        </div>
+        <button onclick="submitWholesaleOrder()" class="w-full mt-4 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-cairo font-bold shadow-md transition">إرسال طلب الجملة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== نافذة مناطق التوصيل ==================== -->
+<div id="deliveryZoneModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity">
+  <div id="deliveryZoneContent" class="bg-white dark:bg-dark-surface w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto scale-95 transition-transform border border-gray-100 dark:border-dark-border">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="font-cairo text-xl font-bold text-gray-900 dark:text-white">🗺️ مناطق التوصيل المعتمدة في قطاع غزة</h3>
+      <button onclick="closeDeliveryZoneModal()" class="text-gray-500 hover:text-red-500 p-1" aria-label="إغلاق">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="deliveryZonesList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    <div id="selectedZoneInfo" class="hidden mt-5 p-4 bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded-xl">
+      <div class="flex items-center gap-3 mb-3">
+        <span id="selectedZoneIcon" class="text-3xl"></span>
+        <div>
+          <h4 id="selectedZoneName" class="font-cairo font-bold text-gray-900 dark:text-white"></h4>
+          <p id="selectedZoneStatus" class="text-sm font-cairo font-bold"></p>
+        </div>
+      </div>
+      <div class="mb-2">تكلفة التوصيل: <strong id="selectedZoneCost" class="text-brand-600"></strong></div>
+      <div id="selectedZoneCompanies" class="flex flex-wrap gap-1"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Toast ==================== -->
+<div id="toastMessage" class="fixed bottom-5 right-5 z-[200] bg-brand-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 max-w-sm translate-y-20 opacity-0 transition-all duration-300 border border-brand-400">
+  <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+  <span id="toastText" class="font-cairo font-bold">تم بنجاح!</span>
+</div>
+
+<!-- ==================== حاوية الإشعارات البصرية ==================== -->
+<div id="visualAlertContainer"></div>
+
+<!-- ==================== JavaScript: IndexedDB & Application Core ==================== -->
+<script>
+/* ==================== 1. نظام التخزين المتقدم: IndexedDB Core ==================== */
+const DB_NAME = 'GazaMarket_IndexedDB';
+const DB_VERSION = 1;
+let db = null;
+
+// مستودع البيانات في الذاكرة للوصول السريع
+let categories = [];
+let ads = [];
+let deliveryCompanies = [];
+let users = [];
+let buyers = []; // قاعدة بيانات الشارين والدفعات (جديد)
+let nextAdId = 1;
+let nextDeliveryId = 100;
+let nextUserId = 100;
+let currentCategoryId = null;
+
+const OFFLINE_PLACEHOLDER = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22200%22%20style%3D%22background%3A%23e2e8f0%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22bold%22%20font-size%3D%2220%22%20fill%3D%22%23475569%22%3E%D8%A8%D8%AF%D9%88%D9%86%20%D8%B5%D9%88%D8%B1%D8%A9%3C%2Ftext%3E%3C%2Fsvg%3E";
+
+// فتح وإنشاء جداول قاعدة بيانات IndexedDB
+function initIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onupgradeneeded = (event) => {
+      const d = event.target.result;
+      if (!d.objectStoreNames.contains('categories')) d.createObjectStore('categories', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('ads')) d.createObjectStore('ads', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('deliveryCompanies')) d.createObjectStore('deliveryCompanies', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('users')) d.createObjectStore('users', { keyPath: 'id' });
+      // متجر المشترين والدفعات مفهرس برقم الهوية
+      if (!d.objectStoreNames.contains('buyers')) d.createObjectStore('buyers', { keyPath: 'idNumber' });
+      if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta', { keyPath: 'key' });
+    };
+
+    request.onsuccess = (event) => {
+      db = event.target.result;
+      resolve(db);
+    };
+
+    request.onerror = (event) => {
+      console.error('IndexedDB Error:', event.target.errorCode);
+      reject(event.target.errorCode);
+    };
+  });
+}
+
+// دوال مساعدة عامة لـ IndexedDB
+function idbGetAll(storeName) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readonly');
+    const store = tx.objectStore(storeName);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function idbPutItem(storeName, item) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+    const req = store.put(item);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function idbClearStore(storeName) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+    const req = store.clear();
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function idbBulkPut(storeName, items) {
+  return new Promise((resolve, reject) => {
+    if (!items || items.length === 0) return resolve();
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+    items.forEach(item => store.put(item));
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+// حفظ الحالة الكاملة في IndexedDB
+async function persistAllState() {
+  try {
+    await Promise.all([
+      idbClearStore('categories').then(() => idbBulkPut('categories', categories)),
+      idbClearStore('ads').then(() => idbBulkPut('ads', ads)),
+      idbClearStore('deliveryCompanies').then(() => idbBulkPut('deliveryCompanies', deliveryCompanies)),
+      idbClearStore('users').then(() => idbBulkPut('users', users)),
+      idbClearStore('buyers').then(() => idbBulkPut('buyers', buyers)),
+      idbPutItem('meta', { key: 'counters', nextAdId, nextDeliveryId, nextUserId })
+    ]);
+  } catch (err) {
+    console.error('Error persisting to IndexedDB:', err);
+    showVisualAlert('⚠️ تعذر الحفظ في IndexedDB', 'danger');
+  }
+}
+
+/* ==================== 2. التهيئة وترقية البيانات الافتراضية ==================== */
+const defaultCategories = [
+  { id: 'cars', name: 'سيارات', icon: 'M8 7h8M5 11h14l1 4H4l1-4zM4 15v4h2v-2h12v2h2v-4' },
+  { id: 'realestate', name: 'عقارات', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3' },
+  { id: 'electronics', name: 'إلكترونيات', icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+  { id: 'furniture', name: 'أثاث ومفروشات', icon: 'M20 19v-4a2 2 0 00-2-2h-1V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4H6a2 2 0 00-2 2v4M4 19h16M7 19v2M17 19v2' },
+  { id: 'food', name: 'مواد غذائية', icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' },
+  { id: 'restaurants', name: 'مطاعم', icon: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4' },
+  { id: 'clothes', name: 'ملابس', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' },
+  { id: 'construction', name: 'مواد بناء', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' }
+];
+
+const sampleTitles = {
+  cars: ['تويوتا كورولا', 'هيونداي النترا', 'كيا سيراتو', 'نيسان صني', 'ميتسوبيشي لانسر', 'شيفروليه أوبترا', 'فولكس واجن جيتا', 'سكودا أوكتافيا', 'رينو ميجان', 'بيجو 301'],
+  realestate: ['شقة للإيجار 3 غرف', 'أرض للبيع 500م', 'فيلا للبيع', 'محل تجاري', 'شقة للبيع', 'أرض زراعية', 'مكتب للإيجار', 'شاليه', 'دوبلكس', 'استوديو للإيجار'],
+  electronics: ['iPhone 13 Pro', 'لابتوب HP i7', 'تلفاز سامسونج 55', 'غسالة LG', 'ثلاجة Samsung', 'مكيف Gree', 'iPhone 14', 'لابتوب Dell', 'iPad Pro', 'PlayStation 5'],
+  furniture: ['طقم كنب 7 مقاعد', 'سرير خشبي مزدوج', 'طاولة طعام', 'خزانة ملابس', 'كنبة زاوية', 'غرفة نوم كاملة', 'طقم صالون', 'سرير أطفال', 'مكتب دراسة', 'كرسي مكتبي'],
+  food: ['زيت زيتون 5 لتر', 'عسل طبيعي', 'تمر مجفف', 'جبنة بيضاء', 'زعتر بلدي', 'دبس رمان', 'مخلل مشكل', 'طحينة', 'حلاوة طحينية', 'مربى مشمش'],
+  restaurants: ['شاورما دجاج', 'بيتزا مشكل', 'ساندويش فلافل', 'كباب مشوي', 'برجر لحم', 'دجاج مشوي', 'مقلوبة', 'منسف', 'مسخن', 'كبة مقلية'],
+  clothes: ['فستان نسائي', 'قميص رجالي', 'حذاء رياضي', 'عباية نسائية', 'بنطال جينز', 'تيشيرت', 'بلوزة', 'جاكيت شتوي', 'حقيبة يد', 'حزام جلد'],
+  construction: ['أسمنت 50 كغ', 'حديد تسليح', 'بلاط أرضيات', 'طوب بناء', 'رمل', 'حصمة', 'جبس', 'دهان أبيض', 'سيراميك حمام', 'خشب نجارة']
+};
+const locations = ['غزة - الرمال', 'غزة - النصر', 'غزة - الشيخ رضوان', 'غزة - تل الهوا', 'غزة - الزيتون', 'غزة - جباليا', 'دير البلح', 'خان يونس', 'رفح', 'بيت لاهيا'];
+const subscribers = ['محمد أحمد', 'خالد سعيد', 'علي حسن', 'سامي محمود', 'أحمد الخطيب', 'يوسف عمر', 'إبراهيم ياسر', 'زيد خالد', 'كريم وائل', 'طارق زياد'];
+
+function generateInitialMockData() {
+  const initialAds = [];
+  let tempCounter = 1;
+  defaultCategories.forEach(cat => {
+    const titles = sampleTitles[cat.id] || ['منتج مميز'];
+    for (let i = 0; i < 15; i++) {
+      const title = titles[i % titles.length] + (i >= titles.length ? ' ' + Math.ceil((i + 1) / titles.length) : '');
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      initialAds.push({
+        id: tempCounter++,
+        title: title,
+        price: Math.floor(Math.random() * 4500) + 60,
+        location: locations[Math.floor(Math.random() * locations.length)],
+        date: date.toISOString().split('T')[0],
+        subscriber: subscribers[Math.floor(Math.random() * subscribers.length)],
+        category: cat.id,
+        image: OFFLINE_PLACEHOLDER
+      });
+    }
+  });
+
+  const initialDelivery = [
+    { id: 1, name: 'ديليفري غزة (غزة ديلفري)', desc: 'يغطي جميع مناطق قطاع غزة من رفح لبيت حانون، لتوصيل طلبات المتاجر والمشاريع المنزلية.', phones: ['0592990975', '0567945070'], whatsapp: '0592243276' },
+    { id: 2, name: 'سكة ديلفري', desc: 'شبكة كباتن لتوصيل الطلبات الفردية والمتاجر والمطاعم وتخدم شمال قطاع غزة، مدينة غزة، الوسطى وخانيونس.', phones: ['0597845475', '0567269504'], whatsapp: '' },
+    { id: 3, name: 'الصقور دليفري (فرع غزة)', desc: 'يقدم خدمات التوصيل السريع للطلبات والمشتريات والطعام.', phones: ['0568806806'], whatsapp: '0568806806' },
+    { id: 4, name: 'ديليفري سريع (Delivery Sare3)', desc: 'خدمات لوجستية وتوصيل سريع في مدينة غزة والوسطى.', phones: ['2840108', '0593981098', '0567001210'], whatsapp: '' },
+    { id: 5, name: 'ديلفري البلد', desc: 'يغطي مناطق المحافظة الوسطى (مثل دير البلح) وضواحيها وجنوب وشمال القطاع.', phones: ['0599000111'], whatsapp: '' }
+  ];
+
+  const initialUsers = [
+    { id: 1, name: 'محمد أحمد الخطيب', email: 'mohammed@example.com', city: 'غزة', date: '2026-01-10' },
+    { id: 2, name: 'سارة علي النجار', email: 'sara@example.com', city: 'خان يونس', date: '2026-01-12' }
+  ];
+
+  const initialBuyers = [
+    {
+      idNumber: '401987654',
+      name: 'عبد الله محمود رضوان',
+      phone: '0599123456',
+      address: 'غزة - النصر، شارع اللبابيدي',
+      zone: 'مدينة غزة',
+      totalSpent: 420,
+      orders: [
+        {
+          id: 'ORD-101',
+          date: '2026-02-15 14:30',
+          adTitle: 'شاورما دجاج عائلية',
+          price: 70,
+          deliveryCost: 10,
+          total: 80,
+          zone: 'مدينة غزة',
+          status: 'تم التسليم والدفع نقداً'
+        },
+        {
+          id: 'ORD-102',
+          date: '2026-03-01 11:20',
+          adTitle: 'طقم كنب 7 مقاعد',
+          price: 330,
+          deliveryCost: 10,
+          total: 340,
+          zone: 'مدينة غزة',
+          status: 'تم التسليم والدفع نقداً'
+        }
+      ]
+    }
+  ];
+
+  return { initialCategories: defaultCategories, initialAds, initialDelivery, initialUsers, initialBuyers, nextId: tempCounter };
+}
+
+// تحميل البيانات والترحيل من LocalStorage إلى IndexedDB إذا وُجدت
+async function loadDataFromIndexedDB() {
+  try {
+    await initIndexedDB();
+
+    // فحص محتويات IndexedDB
+    let loadedCategories = await idbGetAll('categories');
+    let loadedAds = await idbGetAll('ads');
+    let loadedDelivery = await idbGetAll('deliveryCompanies');
+    let loadedUsers = await idbGetAll('users');
+    let loadedBuyers = await idbGetAll('buyers');
+    let loadedMeta = await idbGetAll('meta');
+
+    // إذا كانت قاعدة بيانات IndexedDB فارغة، نتحقق من LocalStorage للترحيل الذكي
+    if (loadedCategories.length === 0 && loadedAds.length === 0) {
+      const localAds = localStorage.getItem('gazaMarket_ads');
+      if (localAds) {
+        // ترحيل البيانات القديمة من LocalStorage
+        ads = JSON.parse(localAds) || [];
+        categories = JSON.parse(localStorage.getItem('gazaMarket_categories')) || defaultCategories;
+        deliveryCompanies = JSON.parse(localStorage.getItem('gazaMarket_delivery')) || [];
+        users = JSON.parse(localStorage.getItem('gazaMarket_users')) || [];
+        buyers = [];
+        const counters = JSON.parse(localStorage.getItem('gazaMarket_counters')) || { nextAdId: ads.length + 1, nextDeliveryId: 100, nextUserId: 100 };
+        nextAdId = counters.nextAdId;
+        nextDeliveryId = counters.nextDeliveryId;
+        nextUserId = counters.nextUserId;
+
+        // تنظيف LocalStorage لتوفير المساحة وتثبيت التحول إلى IndexedDB
+        localStorage.removeItem('gazaMarket_ads');
+        localStorage.removeItem('gazaMarket_users');
+        localStorage.removeItem('gazaMarket_delivery');
+        localStorage.removeItem('gazaMarket_categories');
+        localStorage.removeItem('gazaMarket_counters');
+      } else {
+        // إنشاء بيانات تجريبية أولية متكاملة
+        const initial = generateInitialMockData();
+        categories = initial.initialCategories;
+        ads = initial.initialAds;
+        deliveryCompanies = initial.initialDelivery;
+        users = initial.initialUsers;
+        buyers = initial.initialBuyers;
+        nextAdId = initial.nextId;
+      }
+      await persistAllState();
+    } else {
+      categories = loadedCategories;
+      ads = loadedAds;
+      deliveryCompanies = loadedDelivery;
+      users = loadedUsers;
+      buyers = loadedBuyers;
+      const counterMeta = loadedMeta.find(m => m.key === 'counters');
+      if (counterMeta) {
+        nextAdId = counterMeta.nextAdId || ads.length + 1;
+        nextDeliveryId = counterMeta.nextDeliveryId || 100;
+        nextUserId = counterMeta.nextUserId || 100;
+      } else {
+        nextAdId = ads.length + 1;
+      }
+    }
+
+    // إخفاء مؤشر التحميل الأولي
+    const loader = document.getElementById('dbLoadingIndicator');
+    if (loader) {
+      loader.classList.add('opacity-0');
+      setTimeout(() => loader.classList.add('hidden'), 300);
+    }
+
+    renderCategories();
+    renderDelivery();
+    updateHeaderStats();
+
+  } catch (error) {
+    console.error('Critical failure during IDB initialization:', error);
+    showVisualAlert('❌ خطأ في تشغيل قاعدة البيانات IndexedDB', 'danger');
+  }
+}
+
+/* ==================== 3. نظام الوضع الليلي ==================== */
+const themeToggleBtn = document.getElementById('themeToggle');
+const htmlEl = document.documentElement;
+
+function initTheme() {
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    htmlEl.classList.add('dark');
+  } else {
+    htmlEl.classList.remove('dark');
+  }
+}
+initTheme();
+
+themeToggleBtn.addEventListener('click', () => {
+  htmlEl.classList.toggle('dark');
+  localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+});
+
+/* ==================== 4. عرض وتصفح الأقسام ==================== */
+function renderCategories() {
+  const grid = document.getElementById('categoriesGrid');
+  grid.innerHTML = categories.map(cat => {
+    const count = ads.filter(a => a.category === cat.id).length;
+    return `
+      <button onclick="openCategoryPage('${cat.id}')" class="aspect-square bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2.5 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group p-3 text-center" aria-label="قسم ${cat.name}">
+        <div class="p-3.5 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded-2xl group-hover:scale-110 transition-transform">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${cat.icon}"></path></svg>
+        </div>
+        <span class="font-cairo font-bold text-gray-800 dark:text-gray-200 text-sm">${cat.name}</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 rounded-full font-cairo font-semibold">${count} إعلان</span>
+      </button>`;
+  }).join('');
+}
+
+function updateHeaderStats() {
+  const badge = document.getElementById('totalAdsCounterBadge');
+  if (badge) {
+    badge.textContent = `${ads.length} إعلان متوفر`;
+  }
+}
+
+/* ==================== 5. التنقل بين الصفحات ==================== */
+function showPage(pageId) {
+  document.getElementById('homePage').classList.add('hidden');
+  document.getElementById('categoryPage').classList.add('hidden');
+  document.getElementById('searchResults').classList.add('hidden');
+  document.getElementById(pageId).classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goHome() {
+  currentCategoryId = null;
+  document.getElementById('searchInput').value = '';
+  showPage('homePage');
+  updateHeaderStats();
+}
+
+function openCategoryPage(catId) {
+  const cat = categories.find(c => c.id === catId);
+  if (!cat) return;
+  currentCategoryId = catId;
+  let catAds = ads.filter(a => a.category === catId);
+  catAds.sort((a, b) => new Date(b.date) - new Date(a.date));
+  document.getElementById('categoryPageName').textContent = cat.name;
+  document.getElementById('categoryPageCount').textContent = `${catAds.length} إعلان`;
+  const grid = document.getElementById('categoryPageGrid');
+  const emptyMsg = document.getElementById('categoryEmptyMsg');
+  if (catAds.length === 0) {
+    grid.innerHTML = '';
+    emptyMsg.classList.remove('hidden');
+  } else {
+    emptyMsg.classList.add('hidden');
+    grid.innerHTML = catAds.map(ad => renderAdCard(ad)).join('');
+  }
+  showPage('categoryPage');
+}
+
+function openAdModalFromCategory() {
+  if (!currentCategoryId) return;
+  const cat = categories.find(c => c.id === currentCategoryId);
+  if (cat) openAdModal(cat.name, cat.id);
+}
+
+function renderAdCard(ad) {
+  const cat = categories.find(c => c.id === ad.category);
+  return `
+    <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-brand-500/50 transition-all duration-300 group flex flex-col justify-between">
+      <div>
+        <div class="h-36 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
+          <img src="${ad.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${ad.title}" onerror="this.src='${OFFLINE_PLACEHOLDER}'">
+          ${cat ? `<span class="absolute top-2 right-2 text-[10px] font-cairo font-bold text-brand-700 dark:text-brand-300 bg-white/90 dark:bg-dark-surface/90 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm">${cat.name}</span>` : ''}
+        </div>
+        <div class="p-3.5">
+          <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-100 mb-1 truncate" title="${ad.title}">${ad.title}</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate flex items-center gap-1">
+            <span>📍</span> ${ad.location}
+          </p>
+          <div class="flex items-center justify-between text-[11px] text-gray-400 mb-2">
+            <span>⏱ ${ad.date}</span>
+            <span class="truncate max-w-[90px]">👤 ${ad.subscriber}</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-3.5 pt-0 border-t border-gray-50 dark:border-dark-border/40 mt-1 flex justify-between items-center">
+        <span class="text-brand-600 dark:text-brand-400 font-extrabold text-base font-cairo">${ad.price.toLocaleString()} ₪</span>
+        <button onclick="triggerPurchase(${ad.id})" class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 hover:bg-brand-500 hover:text-white px-3 py-1.5 rounded-xl font-cairo font-bold transition shadow-sm">
+          اطلب الآن
+        </button>
+      </div>
+    </div>`;
+}
+
+/* ==================== 6. محرك البحث ==================== */
+function performSearch() {
+  const query = document.getElementById('searchInput').value.trim();
+  if (!query) { clearSearch(); return; }
+  const q = query.toLowerCase();
+  const results = ads.filter(ad =>
+    ad.title.toLowerCase().includes(q) ||
+    ad.location.toLowerCase().includes(q) ||
+    ad.subscriber.toLowerCase().includes(q) ||
+    (categories.find(c => c.id === ad.category)?.name || '').toLowerCase().includes(q) ||
+    ad.price.toString().includes(q)
+  );
+  results.sort((a, b) => new Date(b.date) - new Date(a.date));
+  document.getElementById('searchQueryDisplay').textContent = `"${query}"`;
+  document.getElementById('searchCount').textContent = `(${results.length} نتيجة)`;
+  const grid = document.getElementById('searchResultsGrid');
+  const noMsg = document.getElementById('noResultsMsg');
+  if (results.length === 0) {
+    grid.innerHTML = '';
+    noMsg.classList.remove('hidden');
+  } else {
+    noMsg.classList.add('hidden');
+    grid.innerHTML = results.map(ad => renderAdCard(ad)).join('');
+  }
+  showPage('searchResults');
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  currentCategoryId = null;
+  showPage('homePage');
+}
+
+/* ==================== 7. النوافذ المنبثقة العامة ==================== */
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  setTimeout(() => {
+    modal.classList.remove('opacity-0');
+    const content = modal.querySelector('[id$="Content"]') || modal.firstElementChild;
+    if (content) { content.classList.remove('scale-95'); content.classList.add('scale-100'); }
+  }, 10);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModalById(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add('opacity-0');
+  const content = modal.querySelector('[id$="Content"]') || modal.firstElementChild;
+  if (content) { content.classList.remove('scale-100'); content.classList.add('scale-95'); }
+  setTimeout(() => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }, 250);
+  document.body.style.overflow = '';
+}
+
+/* ==================== 8. نظام الشراء وحفظ بيانات الشاري (IndexedDB) ==================== */
+let currentPurchaseAd = null;
+
+function triggerPurchase(adId) {
+  const ad = ads.find(a => a.id === adId);
+  if (!ad) return;
+  currentPurchaseAd = ad;
+  document.getElementById('modalProductTitle').textContent = ad.title;
+  document.getElementById('modalProductPrice').textContent = ad.price.toLocaleString() + ' ₪';
+  document.getElementById('modalProductImage').src = ad.image;
+  document.getElementById('orderProductPrice').textContent = ad.price.toLocaleString() + ' ₪';
+
+  const zoneSelect = document.getElementById('orderZone');
+  zoneSelect.innerHTML = '<option value="">-- اختر منطقة التوصيل --</option>' +
+    deliveryZones.map(z => `<option value="${z.id}">${z.icon} ${z.name} (${z.cost} ₪)</option>`).join('');
+
+  document.getElementById('orderDeliveryCost').textContent = '0 ₪';
+  document.getElementById('orderTotal').textContent = ad.price.toLocaleString() + ' ₪';
+  openModal('purchaseModal');
+}
+
+function updateOrderTotal() {
+  if (!currentPurchaseAd) return;
+  const zoneId = document.getElementById('orderZone').value;
+  const zone = deliveryZones.find(z => z.id === zoneId);
+  const deliveryCost = zone ? zone.cost : 0;
+  const total = currentPurchaseAd.price + deliveryCost;
+  document.getElementById('orderDeliveryCost').textContent = deliveryCost + ' ₪';
+  document.getElementById('orderTotal').textContent = total.toLocaleString() + ' ₪';
+}
+
+function closeModal() { closeModalById('purchaseModal'); }
+
+// حفظ بيانات الشاري، رقم الهوية، وتاريخ ومبلغ الدفعة في IndexedDB
+async function submitOrder(e) {
+  e.preventDefault();
+  const zoneId = document.getElementById('orderZone').value;
+  if (!zoneId) { showVisualAlert('⚠️ الرجاء اختيار منطقة التوصيل', 'warning'); return; }
+
+  const zone = deliveryZones.find(z => z.id === zoneId);
+  const idNumber = document.getElementById('orderIdNumber').value.trim();
+  const buyerName = document.getElementById('orderName').value.trim();
+  const buyerPhone = document.getElementById('orderPhone').value.trim();
+  const buyerAddress = document.getElementById('orderAddress').value.trim();
+
+  // التحقق من رقم الهوية الفلسطيني
+  if (!/^\d{9}$/.test(idNumber)) {
+    showVisualAlert('⚠️ رقم الهوية يجب أن يتكون من 9 أرقام بالضبط', 'warning');
+    return;
+  }
+
+  const deliveryCost = zone ? zone.cost : 0;
+  const totalPaid = currentPurchaseAd.price + deliveryCost;
+  const now = new Date();
+  const orderRecord = {
+    id: 'ORD-' + Date.now().toString().slice(-6),
+    date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+    adTitle: currentPurchaseAd.title,
+    adId: currentPurchaseAd.id,
+    price: currentPurchaseAd.price,
+    deliveryCost: deliveryCost,
+    total: totalPaid,
+    zone: zone.name,
+    status: 'تم تأكيد الطلب (دفعة عند الاستلام)'
+  };
+
+  // فحص ما إذا كان الشاري مسجل مسبقاً بنفس رقم الهوية
+  let existingBuyerIndex = buyers.findIndex(b => b.idNumber === idNumber);
+  if (existingBuyerIndex > -1) {
+    // تحديث الشاري الحالي وإضافة الدفعة الجديدة
+    buyers[existingBuyerIndex].name = buyerName;
+    buyers[existingBuyerIndex].phone = buyerPhone;
+    buyers[existingBuyerIndex].address = buyerAddress;
+    buyers[existingBuyerIndex].zone = zone.name;
+    buyers[existingBuyerIndex].totalSpent += totalPaid;
+    buyers[existingBuyerIndex].orders.unshift(orderRecord);
+  } else {
+    // تسجيل شاري جديد في IndexedDB
+    buyers.unshift({
+      idNumber: idNumber,
+      name: buyerName,
+      phone: buyerPhone,
+      address: buyerAddress,
+      zone: zone.name,
+      totalSpent: totalPaid,
+      orders: [orderRecord]
+    });
+  }
+
+  // حفظ في قاعدة بيانات IndexedDB
+  await persistAllState();
+
+  closeModal();
+  showVisualAlert(`✅ تم تسجيل الشاري (${buyerName}) وتأكيد الدفعة بقيمة ${totalPaid.toLocaleString()} ₪ في IndexedDB`, 'success', 5000);
+  e.target.reset();
+  currentPurchaseAd = null;
+
+  if (!document.getElementById('adminModal').classList.contains('hidden')) {
+    renderAdminBuyers();
+    updateAdminStats();
+  }
+}
+
+/* ==================== 9. إضافة وتعديل الإعلانات ==================== */
+function openAdModal(categoryName, categoryId) {
+  document.getElementById('adModalTitle').textContent = 'إضافة إعلان جديد';
+  document.getElementById('adSubmitText').textContent = 'نشر الإعلان';
+  document.getElementById('adEditId').value = '';
+  document.getElementById('selectedCategory').textContent = categoryName || 'عام';
+  document.getElementById('selectedCategory').dataset.catId = categoryId || '';
+  document.getElementById('adminCategoryWrapper').classList.add('hidden');
+  document.getElementById('adDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('adImage').value = '';
+  document.getElementById('imagePreview').classList.add('hidden');
+  document.getElementById('imagePreview').src = '';
+  document.getElementById('uploadPlaceholder').classList.remove('hidden');
+  openModal('adModal');
+}
+
+function openAdModalForAdmin() {
+  document.getElementById('adModalTitle').textContent = 'إضافة إعلان جديد';
+  document.getElementById('adSubmitText').textContent = 'نشر الإعلان';
+  document.getElementById('adEditId').value = '';
+  document.getElementById('selectedCategory').textContent = '';
+  document.getElementById('selectedCategory').dataset.catId = '';
+  const wrapper = document.getElementById('adminCategoryWrapper');
+  const select = document.getElementById('adminCategorySelect');
+  wrapper.classList.remove('hidden');
+  select.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('adDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('adImage').value = '';
+  document.getElementById('imagePreview').classList.add('hidden');
+  document.getElementById('imagePreview').src = '';
+  document.getElementById('uploadPlaceholder').classList.remove('hidden');
+  openModal('adModal');
+}
+
+function closeAdModal() { closeModalById('adModal'); }
+
+function previewImage(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const preview = document.getElementById('imagePreview');
+      preview.src = e.target.result;
+      preview.classList.remove('hidden');
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function submitAd(e) {
+  e.preventDefault();
+  const editId = document.getElementById('adEditId').value;
+  const imagePreview = document.getElementById('imagePreview').src;
+  let catId = document.getElementById('selectedCategory').dataset.catId;
+  if (!catId && !document.getElementById('adminCategoryWrapper').classList.contains('hidden')) {
+    catId = document.getElementById('adminCategorySelect').value;
+  }
+  if (!catId) { showVisualAlert('⚠️ الرجاء اختيار القسم', 'warning'); return; }
+
+  const adData = {
+    title: document.getElementById('adTitle').value,
+    price: parseFloat(document.getElementById('adPrice').value),
+    location: document.getElementById('adLocation').value,
+    date: document.getElementById('adDate').value,
+    subscriber: document.getElementById('adSubscriber').value,
+    category: catId,
+    image: imagePreview || OFFLINE_PLACEHOLDER
+  };
+
+  if (editId) {
+    const idx = ads.findIndex(a => a.id === parseInt(editId));
+    if (idx > -1) {
+      ads[idx] = { ...ads[idx], ...adData };
+      showToast("✅ تم تحديث الإعلان في IndexedDB بنجاح!");
+    }
+  } else {
+    adData.id = nextAdId++;
+    ads.unshift(adData);
+    showToast("✅ تم نشر الإعلان في IndexedDB بنجاح!");
+  }
+
+  await persistAllState();
+  e.target.reset();
+  closeAdModal();
+  renderCategories();
+  updateHeaderStats();
+  if (currentCategoryId && !document.getElementById('categoryPage').classList.contains('hidden')) openCategoryPage(currentCategoryId);
+  if (!document.getElementById('searchResults').classList.contains('hidden')) performSearch();
+  if (!document.getElementById('adminModal').classList.contains('hidden')) { renderAdminAds(); updateAdminStats(); }
+}
+
+/* ==================== 10. نظام المستخدمين والتسجيل ==================== */
+function openSignupModal() { openModal('signupModal'); }
+function closeSignupModal() { closeModalById('signupModal'); }
+
+async function submitSignup(e) {
+  e.preventDefault();
+  const password = document.getElementById('signupPassword').value;
+  const confirmPassword = document.getElementById('signupConfirmPassword').value;
+  const hasLetter = /[A-Za-z\u0600-\u06FF]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  if (password.length < 8 || !hasLetter || !hasNumber) {
+    showVisualAlert('⚠️ كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف ورقم', 'warning');
+    return;
+  }
+  if (password !== confirmPassword) {
+    showVisualAlert('⚠️ كلمتا المرور غير متطابقتين', 'warning');
+    return;
+  }
+
+  users.unshift({
+    id: nextUserId++,
+    name: document.getElementById('signupName').value.trim(),
+    email: document.getElementById('signupEmail').value.trim(),
+    city: document.getElementById('signupCity').value,
+    date: new Date().toISOString().split('T')[0]
+  });
+
+  await persistAllState();
+  closeSignupModal();
+  showToast("✅ تم إنشاء حسابك وحفظه في IndexedDB بنجاح!");
+  e.target.reset();
+  if (!document.getElementById('adminModal').classList.contains('hidden')) { renderAdminUsers(); updateAdminStats(); }
+}
+
+/* ==================== 11. لوحة الأدمن وإدارة المشترين والدفعات ==================== */
+function openAdminModal() {
+  renderAdminAds();
+  renderAdminBuyers();
+  renderAdminCategories();
+  renderAdminDelivery();
+  renderAdminUsers();
+  populateFilterCategory();
+  updateAdminStats();
+  openModal('adminModal');
+}
+function closeAdminModal() { closeModalById('adminModal'); }
+
+function openBackupDirectModal() {
+  openAdminModal();
+  switchAdminTab('backup');
+}
+
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => {
+    t.classList.remove('admin-tab-active');
+    t.classList.add('text-gray-600', 'dark:text-gray-400');
+  });
+  const tabBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (tabBtn) {
+    tabBtn.classList.add('admin-tab-active');
+    tabBtn.classList.remove('text-gray-600', 'dark:text-gray-400');
+  }
+  document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.add('hidden'));
+  const activeContent = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (activeContent) activeContent.classList.remove('hidden');
+}
+
+function updateAdminStats() {
+  document.getElementById('statAds').textContent = ads.length;
+  document.getElementById('statCategories').textContent = categories.length;
+  document.getElementById('statDelivery').textContent = deliveryCompanies.length;
+  document.getElementById('statUsers').textContent = users.length;
+  document.getElementById('statBuyers').textContent = buyers.length;
+  const totalPaymentsSum = buyers.reduce((sum, b) => sum + (b.totalSpent || 0), 0);
+  document.getElementById('statPayments').textContent = totalPaymentsSum.toLocaleString() + ' ₪';
+}
+
+function populateFilterCategory() {
+  const select = document.getElementById('filterCategory');
+  select.innerHTML = '<option value="">كل الأقسام</option>' +
+    categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+function renderAdminAds() {
+  const filter = document.getElementById('filterCategory').value;
+  const filtered = filter ? ads.filter(a => a.category === filter) : ads;
+  const tbody = document.getElementById('adminAdsTable');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500 font-cairo">لا توجد إعلانات مسجلة</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map((ad, idx) => {
+    const cat = categories.find(c => c.id === ad.category);
+    return `
+      <tr class="border-b border-gray-100 dark:border-dark-border">
+        <td class="px-3 py-2 text-gray-500 dark:text-gray-400 text-xs">${idx + 1}</td>
+        <td class="px-3 py-2"><img src="${ad.image}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src='${OFFLINE_PLACEHOLDER}'"></td>
+        <td class="px-3 py-2 font-bold text-gray-800 dark:text-gray-200">${ad.title}</td>
+        <td class="px-3 py-2 text-gray-600 dark:text-gray-400">${cat ? cat.name : '-'}</td>
+        <td class="px-3 py-2 text-brand-600 dark:text-brand-400 font-bold">${ad.price.toLocaleString()} ₪</td>
+        <td class="px-3 py-2 text-gray-600 dark:text-gray-400 text-xs">${ad.location}</td>
+        <td class="px-3 py-2 text-gray-600 dark:text-gray-400 text-xs">${ad.subscriber}</td>
+        <td class="px-3 py-2 text-gray-500 dark:text-gray-400 text-xs">${ad.date}</td>
+        <td class="px-3 py-2">
+          <div class="flex gap-1.5">
+            <button onclick="editAd(${ad.id})" class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition" title="تعديل">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+            <button onclick="deleteAd(${ad.id})" class="p-1.5 rounded-lg bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 transition" title="حذف">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function editAd(id) {
+  const ad = ads.find(a => a.id === id);
+  if (!ad) return;
+  const cat = categories.find(c => c.id === ad.category);
+  document.getElementById('adModalTitle').textContent = 'تعديل الإعلان';
+  document.getElementById('adSubmitText').textContent = 'حفظ التعديلات';
+  document.getElementById('adEditId').value = ad.id;
+  document.getElementById('selectedCategory').textContent = cat ? cat.name : 'عام';
+  document.getElementById('selectedCategory').dataset.catId = ad.category;
+  document.getElementById('adminCategoryWrapper').classList.add('hidden');
+  document.getElementById('adTitle').value = ad.title;
+  document.getElementById('adPrice').value = ad.price;
+  document.getElementById('adLocation').value = ad.location;
+  document.getElementById('adDate').value = ad.date;
+  document.getElementById('adSubscriber').value = ad.subscriber;
+  if (ad.image && !ad.image.includes('data:image/svg')) {
+    document.getElementById('imagePreview').src = ad.image;
+    document.getElementById('imagePreview').classList.remove('hidden');
+    document.getElementById('uploadPlaceholder').classList.add('hidden');
+  } else {
+    document.getElementById('imagePreview').classList.add('hidden');
+    document.getElementById('imagePreview').src = '';
+    document.getElementById('uploadPlaceholder').classList.remove('hidden');
+  }
+  openModal('adModal');
+}
+
+async function deleteAd(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا الإعلان من IndexedDB؟')) return;
+  ads = ads.filter(a => a.id !== id);
+  await persistAllState();
+  renderAdminAds();
+  renderCategories();
+  updateHeaderStats();
+  if (currentCategoryId && !document.getElementById('categoryPage').classList.contains('hidden')) openCategoryPage(currentCategoryId);
+  if (!document.getElementById('searchResults').classList.contains('hidden')) performSearch();
+  updateAdminStats();
+  showToast("🗑️ تم حذف الإعلان");
+}
+
+/* ==================== 12. إدارة بيانات المشترين والدفعات (Buyers) ==================== */
+function renderAdminBuyers() {
+  const search = (document.getElementById('searchBuyerInput')?.value || '').trim().toLowerCase();
+  const filtered = buyers.filter(b =>
+    b.idNumber.toLowerCase().includes(search) ||
+    b.name.toLowerCase().includes(search) ||
+    b.phone.toLowerCase().includes(search)
+  );
+  const tbody = document.getElementById('adminBuyersTable');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-gray-500 font-cairo">لا توجد بيانات شاري مطابقة في IndexedDB</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(buyer => `
+    <tr class="border-b border-gray-100 dark:border-dark-border hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
+      <td class="px-3 py-2.5 font-mono font-bold text-gray-900 dark:text-white">${buyer.idNumber}</td>
+      <td class="px-3 py-2.5 font-bold font-cairo text-brand-700 dark:text-brand-400">${buyer.name}</td>
+      <td class="px-3 py-2.5 text-xs text-gray-600 dark:text-gray-300" dir="ltr">${buyer.phone}</td>
+      <td class="px-3 py-2.5 text-xs text-gray-500 dark:text-gray-400">${buyer.zone || '-'} • ${buyer.address || ''}</td>
+      <td class="px-3 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">${buyer.orders ? buyer.orders.length : 0} طلبات</span>
+      </td>
+      <td class="px-3 py-2.5 font-bold text-brand-600 dark:text-brand-400 font-cairo">${(buyer.totalSpent || 0).toLocaleString()} ₪</td>
+      <td class="px-3 py-2.5 text-center">
+        <button onclick="viewBuyerDetails('${buyer.idNumber}')" class="px-2.5 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded-lg font-cairo text-xs font-bold hover:bg-brand-500 hover:text-white transition">
+          عرض الدفعات
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function viewBuyerDetails(idNumber) {
+  const buyer = buyers.find(b => b.idNumber === idNumber);
+  if (!buyer) return;
+
+  document.getElementById('buyerModalName').textContent = buyer.name;
+  document.getElementById('buyerModalId').textContent = `رقم الهوية: ${buyer.idNumber}`;
+  document.getElementById('buyerModalPhone').textContent = buyer.phone;
+  document.getElementById('buyerModalAddress').textContent = `${buyer.zone} - ${buyer.address}`;
+  document.getElementById('buyerModalTotal').textContent = `${(buyer.totalSpent || 0).toLocaleString()} ₪`;
+  document.getElementById('buyerModalCount').textContent = `${buyer.orders ? buyer.orders.length : 0} طلب`;
+
+  const list = document.getElementById('buyerPaymentsList');
+  if (!buyer.orders || buyer.orders.length === 0) {
+    list.innerHTML = `<p class="text-center text-gray-400 py-4 font-cairo">لا توجد دفعات مسجلة</p>`;
+  } else {
+    list.innerHTML = buyer.orders.map(ord => `
+      <div class="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-dark-border rounded-xl flex justify-between items-center text-xs">
+        <div>
+          <div class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200">${ord.adTitle}</div>
+          <div class="text-gray-400 mt-0.5">التاريخ: ${ord.date} • ${ord.zone}</div>
+          <div class="text-green-600 dark:text-green-400 font-semibold mt-0.5">الحالة: ${ord.status}</div>
+        </div>
+        <div class="text-left font-cairo font-bold text-brand-600 dark:text-brand-400 text-sm">
+          ${ord.total.toLocaleString()} ₪
+          <div class="text-[10px] text-gray-400 font-normal">(إعلان: ${ord.price} + توصيل: ${ord.deliveryCost})</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  openModal('buyerDetailsModal');
+}
+
+async function clearAllBuyersPrompt() {
+  if (!confirm('⚠️ تحذير: هل أنت متأكد من مسح جميع بيانات المشترين وسجل الدفعات من IndexedDB؟')) return;
+  buyers = [];
+  await persistAllState();
+  renderAdminBuyers();
+  updateAdminStats();
+  showToast("🗑️ تم مسح سجل المشترين بنجاح");
+}
+
+/* ==================== 13. التصدير والاستيراد الكامل (Export / Import UX) ==================== */
+// تجميع كافة البيانات بصيغة JSON نظيفة
+function generateFullBackupObject() {
+  return {
+    meta: {
+      appName: 'Gaza Market',
+      version: '2.0.0',
+      storageEngine: 'IndexedDB',
+      exportedAt: new Date().toISOString(),
+      counts: {
+        ads: ads.length,
+        categories: categories.length,
+        deliveryCompanies: deliveryCompanies.length,
+        users: users.length,
+        buyers: buyers.length
+      }
+    },
+    data: {
+      categories,
+      ads,
+      deliveryCompanies,
+      users,
+      buyers,
+      counters: { nextAdId, nextDeliveryId, nextUserId }
+    }
+  };
+}
+
+// 1. تصدير وتحميل ملف JSON
+function exportDataToFile() {
+  try {
+    const backupObj = generateFullBackupObject();
+    const jsonStr = JSON.stringify(backupObj, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const filename = `gaza_market_backup_${dateStr}.json`;
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showVisualAlert('✅ تم تصدير كافة بيانات IndexedDB بنجاح في ملف JSON!', 'success');
+  } catch (err) {
+    console.error('Export error:', err);
+    showVisualAlert('❌ فشل في تصدير البيانات', 'danger');
+  }
+}
+
+// 2. نسخ البيانات للحافظة
+function copyDataToClipboard() {
+  try {
+    const backupObj = generateFullBackupObject();
+    const jsonStr = JSON.stringify(backupObj);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      showVisualAlert('📋 تم نسخ النسخة الاحتياطية كاملة إلى الحافظة بنجاح!', 'info');
+    });
+  } catch (err) {
+    showVisualAlert('⚠️ لم نتمكن من النسخ إلى الحافظة تلقائياً', 'warning');
+  }
+}
+
+// 3. السحب والإفلات UX للاستيراد
+function handleDragOver(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('importDropzone').classList.add('dropzone-active');
+}
+
+function handleDragLeave(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('importDropzone').classList.remove('dropzone-active');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('importDropzone').classList.remove('dropzone-active');
+  const files = e.dataTransfer.files;
+  if (files && files.length > 0) {
+    processImportFile(files[0]);
+  }
+}
+
+function handleFileSelect(e) {
+  const files = e.target.files;
+  if (files && files.length > 0) {
+    processImportFile(files[0]);
+  }
+}
+
+// 4. معالجة وتدقيق ملف الاستيراد
+function processImportFile(file) {
+  if (!file.name.endsWith('.json') && file.type !== 'application/json') {
+    showVisualAlert('⚠️ الرجاء اختيار ملف بصيغة JSON صالح فقط', 'warning');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      const parsed = JSON.parse(event.target.result);
+      if (!parsed.data || !Array.isArray(parsed.data.categories) || !Array.isArray(parsed.data.ads)) {
+        showVisualAlert('❌ بنية ملف النسخ الاحتياطي غير متوافقة مع سوق غزة', 'danger');
+        return;
+      }
+
+      const mode = document.querySelector('input[name="importMode"]:checked')?.value || 'merge';
+      await applyImportedData(parsed.data, mode);
+
+    } catch (err) {
+      console.error('Import Parsing Error:', err);
+      showVisualAlert('❌ الملف تالف أو لا يحتوي على كود JSON صحيح', 'danger');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// 5. تطبيق البيانات المستوردة إلى IndexedDB وتحديث الواجهة فوراً
+async function applyImportedData(incomingData, mode) {
+  try {
+    if (mode === 'overwrite') {
+      // استبدال كامل
+      categories = incomingData.categories || defaultCategories;
+      ads = incomingData.ads || [];
+      deliveryCompanies = incomingData.deliveryCompanies || [];
+      users = incomingData.users || [];
+      buyers = incomingData.buyers || [];
+      if (incomingData.counters) {
+        nextAdId = incomingData.counters.nextAdId || ads.length + 1;
+        nextDeliveryId = incomingData.counters.nextDeliveryId || 100;
+        nextUserId = incomingData.counters.nextUserId || 100;
+      }
+    } else {
+      // دمج ذكي (Merge) بدون تكرار
+      const existingAdIds = new Set(ads.map(a => a.id));
+      (incomingData.ads || []).forEach(newAd => {
+        if (!existingAdIds.has(newAd.id)) ads.push(newAd);
+      });
+
+      const existingCatIds = new Set(categories.map(c => c.id));
+      (incomingData.categories || []).forEach(newCat => {
+        if (!existingCatIds.has(newCat.id)) categories.push(newCat);
+      });
+
+      const existingBuyerIds = new Set(buyers.map(b => b.idNumber));
+      (incomingData.buyers || []).forEach(newBuyer => {
+        if (!existingBuyerIds.has(newBuyer.idNumber)) {
+          buyers.push(newBuyer);
+        } else {
+          // دمج الطلبات لنفس الشاري
+          const idx = buyers.findIndex(b => b.idNumber === newBuyer.idNumber);
+          if (idx > -1 && newBuyer.orders) {
+            buyers[idx].orders = [...(buyers[idx].orders || []), ...newBuyer.orders];
+            buyers[idx].totalSpent = (buyers[idx].totalSpent || 0) + (newBuyer.totalSpent || 0);
+          }
+        }
+      });
+
+      const existingDeliveryIds = new Set(deliveryCompanies.map(d => d.id));
+      (incomingData.deliveryCompanies || []).forEach(newDel => {
+        if (!existingDeliveryIds.has(newDel.id)) deliveryCompanies.push(newDel);
+      });
+
+      nextAdId = Math.max(nextAdId, ...(ads.map(a => a.id) || [0])) + 1;
+    }
+
+    // حفظ فوري في IndexedDB
+    await persistAllState();
+
+    // تحديث الواجهات
+    renderCategories();
+    renderDelivery();
+    updateHeaderStats();
+    renderAdminAds();
+    renderAdminBuyers();
+    renderAdminCategories();
+    renderAdminDelivery();
+    renderAdminUsers();
+    updateAdminStats();
+
+    showVisualAlert(`🎉 تم استيراد البيانات بنجاح (${mode === 'overwrite' ? 'استبدال كامل' : 'دمج ذكي'}) وحفظها في IndexedDB!`, 'success', 5000);
+    document.getElementById('importFileInput').value = '';
+
+  } catch (err) {
+    console.error('Apply import error:', err);
+    showVisualAlert('❌ حدث خطأ أثناء تطبيق البيانات في IndexedDB', 'danger');
+  }
+}
+
+/* ==================== 14. دوال الأقسام، الدليفري، المستخدمين ==================== */
+function renderAdminCategories() {
+  const grid = document.getElementById('adminCategoriesGrid');
+  grid.innerHTML = categories.map(cat => {
+    const count = ads.filter(a => a.category === cat.id).length;
+    return `
+      <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-3.5 hover:border-brand-500 transition">
+        <div class="flex items-center gap-2.5 mb-2.5">
+          <div class="p-2 bg-brand-50 dark:bg-brand-900/20 text-brand-600 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${cat.icon}"></path></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="font-cairo font-bold text-gray-800 dark:text-gray-200 truncate text-sm">${cat.name}</h4>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">${count} إعلان</p>
+          </div>
+        </div>
+        <div class="flex gap-1.5">
+          <button onclick="editCategory('${cat.id}')" class="flex-1 text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 py-1 rounded-lg hover:bg-blue-100 transition font-cairo">تعديل</button>
+          <button onclick="deleteCategory('${cat.id}')" class="flex-1 text-xs bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-1 rounded-lg hover:bg-red-100 transition font-cairo">حذف</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function addCategoryPrompt() {
+  const name = prompt('اسم القسم الجديد:');
+  if (!name) return;
+  const id = 'cat_' + Date.now();
+  categories.push({ id, name, icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' });
+  await persistAllState();
+  renderAdminCategories();
+  renderCategories();
+  populateFilterCategory();
+  updateAdminStats();
+  showToast("✅ تم إضافة القسم");
+}
+
+async function editCategory(id) {
+  const cat = categories.find(c => c.id === id);
+  if (!cat) return;
+  const newName = prompt('اسم القسم:', cat.name);
+  if (newName) {
+    cat.name = newName;
+    await persistAllState();
+    renderAdminCategories();
+    renderCategories();
+    populateFilterCategory();
+    showToast("✅ تم تحديث القسم");
+  }
+}
+
+async function deleteCategory(id) {
+  if (ads.some(a => a.category === id)) {
+    if (!confirm('هذا القسم يحتوي على إعلانات. سيتم حذفها جميعاً. متابعة؟')) return;
+    ads = ads.filter(a => a.category !== id);
+  } else {
+    if (!confirm('هل أنت متأكد من حذف هذا القسم؟')) return;
+  }
+  categories = categories.filter(c => c.id !== id);
+  await persistAllState();
+  renderAdminCategories();
+  renderCategories();
+  renderAdminAds();
+  populateFilterCategory();
+  updateAdminStats();
+  showToast("🗑️ تم حذف القسم");
+}
+
+function renderDelivery() {
+  const list = document.getElementById('deliveryList');
+  if (!list) return;
+  if (deliveryCompanies.length === 0) {
+    list.innerHTML = `<p class="text-center text-gray-500 py-6">لا توجد شركات دليفري حالياً</p>`;
+    return;
+  }
+  list.innerHTML = deliveryCompanies.map(d => `
+    <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-brand-500 transition-all mb-3">
+      <div class="flex items-start gap-3 mb-3">
+        <div class="p-2 bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-lg flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <div class="flex-1">
+          <h4 class="font-cairo font-bold text-gray-900 dark:text-white text-base mb-1">${d.name}</h4>
+          <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">${d.desc}</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        ${(d.phones || []).map(p => `
+          <a href="tel:${p}" class="flex items-center gap-1 bg-white dark:bg-gray-700 hover:bg-brand-50 dark:hover:bg-brand-900/30 border border-gray-200 dark:border-gray-600 rounded-lg py-1 px-2.5 transition text-xs font-bold" dir="ltr">
+            📞 ${p}
+          </a>
+        `).join('')}
+        ${d.whatsapp ? `
+          <a href="https://wa.me/970${d.whatsapp.replace(/^0/, '')}" target="_blank" class="flex items-center gap-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800 rounded-lg py-1 px-2.5 transition text-xs font-bold font-cairo">
+            💬 واتساب
+          </a>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAdminDelivery() {
+  const list = document.getElementById('adminDeliveryList');
+  if (deliveryCompanies.length === 0) {
+    list.innerHTML = `<p class="text-center text-gray-500 py-6">لا توجد شركات دليفري مسجلة</p>`;
+    return;
+  }
+  list.innerHTML = deliveryCompanies.map(d => `
+    <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-4 flex justify-between items-start gap-3">
+      <div class="flex-1 min-w-0">
+        <h4 class="font-cairo font-bold text-gray-800 dark:text-gray-200 mb-1">${d.name}</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">${d.desc}</p>
+        <div class="flex flex-wrap gap-1 text-xs">
+          ${(d.phones || []).map(p => `<span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-700 dark:text-gray-300" dir="ltr">${p}</span>`).join('')}
+          ${d.whatsapp ? `<span class="bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded text-green-700 dark:text-green-400">واتساب: ${d.whatsapp}</span>` : ''}
+        </div>
+      </div>
+      <div class="flex gap-1.5">
+        <button onclick="editDelivery(${d.id})" class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        </button>
+        <button onclick="deleteDelivery(${d.id})" class="p-1.5 rounded-lg bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openDeliveryForm(editId) {
+  if (editId) {
+    const d = deliveryCompanies.find(x => x.id === editId);
+    if (!d) return;
+    document.getElementById('deliveryFormTitle').textContent = 'تعديل شركة دليفري';
+    document.getElementById('deliveryEditId').value = d.id;
+    document.getElementById('deliveryName').value = d.name;
+    document.getElementById('deliveryDesc').value = d.desc;
+    document.getElementById('deliveryPhones').value = (d.phones || []).join(', ');
+    document.getElementById('deliveryWhatsapp').value = d.whatsapp || '';
+  } else {
+    document.getElementById('deliveryFormTitle').textContent = 'إضافة شركة دليفري';
+    document.getElementById('deliveryEditId').value = '';
+    document.getElementById('deliveryName').value = '';
+    document.getElementById('deliveryDesc').value = '';
+    document.getElementById('deliveryPhones').value = '';
+    document.getElementById('deliveryWhatsapp').value = '';
+  }
+  openModal('deliveryFormModal');
+}
+function closeDeliveryForm() { closeModalById('deliveryFormModal'); }
+
+async function submitDeliveryForm(e) {
+  e.preventDefault();
+  const editId = document.getElementById('deliveryEditId').value;
+  const phones = document.getElementById('deliveryPhones').value.split(',').map(p => p.trim()).filter(p => p);
+  const data = {
+    name: document.getElementById('deliveryName').value,
+    desc: document.getElementById('deliveryDesc').value,
+    phones: phones,
+    whatsapp: document.getElementById('deliveryWhatsapp').value.trim()
+  };
+  if (editId) {
+    const idx = deliveryCompanies.findIndex(d => d.id === parseInt(editId));
+    if (idx > -1) deliveryCompanies[idx] = { ...deliveryCompanies[idx], ...data };
+    showToast("✅ تم تحديث شركة الدليفري");
+  } else {
+    data.id = nextDeliveryId++;
+    deliveryCompanies.push(data);
+    showToast("✅ تم إضافة شركة الدليفري");
+  }
+  await persistAllState();
+  closeDeliveryForm();
+  renderAdminDelivery();
+  renderDelivery();
+  updateAdminStats();
+}
+
+function editDelivery(id) { openDeliveryForm(id); }
+
+async function deleteDelivery(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه الشركة من IndexedDB؟')) return;
+  deliveryCompanies = deliveryCompanies.filter(d => d.id !== id);
+  await persistAllState();
+  renderAdminDelivery();
+  renderDelivery();
+  updateAdminStats();
+  showToast("🗑️ تم حذف شركة الدليفري");
+}
+
+function renderAdminUsers() {
+  const list = document.getElementById('adminUsersList');
+  if (users.length === 0) {
+    list.innerHTML = `<p class="text-center text-gray-500 py-6">لا يوجد مستخدمون مسجلون</p>`;
+    return;
+  }
+  list.innerHTML = users.map(u => `
+    <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-4 flex items-center gap-3">
+      <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-full flex items-center justify-center font-cairo font-bold">
+        ${u.name.charAt(0)}
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-cairo font-bold text-gray-800 dark:text-gray-200">${u.name}</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400" dir="ltr">${u.email}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">📍 ${u.city} • ${u.date}</p>
+      </div>
+      <button onclick="deleteUser(${u.id})" class="p-2 rounded-lg bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+async function deleteUser(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
+  users = users.filter(u => u.id !== id);
+  await persistAllState();
+  renderAdminUsers();
+  updateAdminStats();
+  showToast("🗑️ تم حذف المستخدم");
+}
+
+function openDeliveryModal() { renderDelivery(); openModal('deliveryModal'); }
+function closeDeliveryModal() { closeModalById('deliveryModal'); }
+
+/* ==================== 15. بوابة الجملة B2B ==================== */
+const wholesaleTiers = [
+  { min: 10, max: 49, discount: 0.10 },
+  { min: 50, max: 99, discount: 0.20 },
+  { min: 100, max: 499, discount: 0.30 },
+  { min: 500, max: Infinity, discount: 0.40 }
+];
+
+let wholesaleCart = [];
+let currentWholesaleCategory = 'cars';
+
+function getWholesaleDiscount(quantity) {
+  const tier = wholesaleTiers.find(t => quantity >= t.min && quantity <= t.max);
+  return tier ? tier.discount : 0;
+}
+
+function getWholesaleTierLabel(quantity) {
+  const tier = wholesaleTiers.find(t => quantity >= t.min && quantity <= t.max);
+  if (!tier) return '';
+  return `${Math.round(tier.discount * 100)}% خصم`;
+}
+
+function openWholesaleModal() {
+  wholesaleCart = [];
+  currentWholesaleCategory = categories[0]?.id || 'cars';
+  renderWholesaleCategories();
+  renderWholesaleProducts();
+  updateWholesaleSummary();
+  openModal('wholesaleModal');
+  showVisualAlert('🏢 مرحباً بك في بوابة الجملة! خصومات حتى 40% للتجار', 'info', 4000);
+}
+
+function closeWholesaleModal() { closeModalById('wholesaleModal'); }
+
+function renderWholesaleCategories() {
+  const container = document.getElementById('wholesaleCategories');
+  container.innerHTML = categories.map(cat => `
+    <button onclick="selectWholesaleCategory('${cat.id}')"
+            class="px-4 py-2 rounded-xl font-cairo font-bold text-sm transition ${cat.id === currentWholesaleCategory ? 'bg-amber-500 text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}">
+      ${cat.name}
+    </button>`).join('');
+}
+
+function selectWholesaleCategory(catId) {
+  currentWholesaleCategory = catId;
+  renderWholesaleCategories();
+  renderWholesaleProducts();
+}
+
+function renderWholesaleProducts() {
+  const grid = document.getElementById('wholesaleProductsGrid');
+  const catAds = ads.filter(a => a.category === currentWholesaleCategory).slice(0, 12);
+  if (catAds.length === 0) {
+    grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500 font-cairo">لا توجد منتجات في هذا القسم</div>`;
+    return;
+  }
+  grid.innerHTML = catAds.map(ad => {
+    const cartItem = wholesaleCart.find(c => c.adId === ad.id);
+    const qty = cartItem?.quantity || 0;
+    const discount = getWholesaleDiscount(qty);
+    const finalPrice = ad.price * (1 - discount);
+    return `
+      <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+        <div class="h-32 bg-gray-100 dark:bg-gray-800 overflow-hidden relative">
+          <img src="${ad.image}" class="w-full h-full object-cover" alt="${ad.title}" onerror="this.src='${OFFLINE_PLACEHOLDER}'">
+          <span class="absolute top-2 right-2 wholesale-badge">B2B</span>
+        </div>
+        <div class="p-3">
+          <h3 class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 mb-1 truncate">${ad.title}</h3>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-500 dark:text-gray-400">السعر القطاعي:</span>
+            <span class="text-xs font-bold text-gray-600 dark:text-gray-300 line-through">${ad.price.toLocaleString()} ₪</span>
+          </div>
+          ${qty > 0 ? `
+            <div class="flex items-center justify-between mb-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-2">
+              <span class="text-xs font-cairo font-bold text-amber-700 dark:text-amber-400">${getWholesaleTierLabel(qty)}:</span>
+              <span class="text-sm font-bold text-amber-600 dark:text-amber-400">${finalPrice.toFixed(2)} ₪</span>
+            </div>` : ''}
+          <div class="flex items-center gap-2">
+            <button onclick="updateWholesaleQty(${ad.id}, -1)" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-300 font-bold transition" aria-label="تقليل">−</button>
+            <input type="number" value="${qty}" min="0" max="9999" onchange="setWholesaleQty(${ad.id}, this.value)" class="w-16 text-center px-2 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-bold">
+            <button onclick="updateWholesaleQty(${ad.id}, 1)" class="w-8 h-8 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition" aria-label="زيادة">+</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function updateWholesaleQty(adId, delta) {
+  const idx = wholesaleCart.findIndex(c => c.adId === adId);
+  if (idx > -1) {
+    wholesaleCart[idx].quantity = Math.max(0, wholesaleCart[idx].quantity + delta);
+    if (wholesaleCart[idx].quantity === 0) wholesaleCart.splice(idx, 1);
+  } else if (delta > 0) {
+    wholesaleCart.push({ adId, quantity: 1 });
+  }
+  renderWholesaleProducts();
+  updateWholesaleSummary();
+}
+
+function setWholesaleQty(adId, value) {
+  const qty = Math.max(0, parseInt(value) || 0);
+  const idx = wholesaleCart.findIndex(c => c.adId === adId);
+  if (qty === 0) {
+    if (idx > -1) wholesaleCart.splice(idx, 1);
+  } else if (idx > -1) {
+    wholesaleCart[idx].quantity = qty;
+  } else {
+    wholesaleCart.push({ adId, quantity: qty });
+  }
+  renderWholesaleProducts();
+  updateWholesaleSummary();
+}
+
+function updateWholesaleSummary() {
+  const summary = document.getElementById('wholesaleSummary');
+  const itemsDiv = document.getElementById('wholesaleSummaryItems');
+  if (wholesaleCart.length === 0) { summary.classList.add('hidden'); return; }
+  summary.classList.remove('hidden');
+  let subtotal = 0;
+  let total = 0;
+  itemsDiv.innerHTML = wholesaleCart.map(item => {
+    const ad = ads.find(a => a.id === item.adId);
+    if (!ad) return '';
+    const discount = getWholesaleDiscount(item.quantity);
+    const lineSubtotal = ad.price * item.quantity;
+    const lineTotal = lineSubtotal * (1 - discount);
+    subtotal += lineSubtotal;
+    total += lineTotal;
+    return `
+      <div class="flex items-center justify-between bg-white dark:bg-dark-surface rounded-xl p-2.5 border border-gray-100 dark:border-dark-border">
+        <div class="flex-1 min-w-0">
+          <div class="font-cairo font-bold text-sm text-gray-800 dark:text-gray-200 truncate">${ad.title}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">${item.quantity} × ${ad.price.toLocaleString()} ₪ = ${lineSubtotal.toLocaleString()} ₪</div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm font-bold text-brand-600 dark:text-brand-400">${lineTotal.toFixed(2)} ₪</div>
+          ${discount > 0 ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-bold">خصم ${Math.round(discount * 100)}%</div>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('wholesaleSubtotal').textContent = subtotal.toLocaleString() + ' ₪';
+  document.getElementById('wholesaleDiscount').textContent = '-' + (subtotal - total).toFixed(2) + ' ₪';
+  document.getElementById('wholesaleTotal').textContent = total.toFixed(2) + ' ₪';
+}
+
+function submitWholesaleOrder() {
+  if (wholesaleCart.length === 0) { showVisualAlert('⚠️ السلة فارغة! أضف منتجات أولاً', 'warning'); return; }
+  const total = document.getElementById('wholesaleTotal').textContent;
+  closeWholesaleModal();
+  showVisualAlert(`✅ تم إرسال طلب الجملة بنجاح! الإجمالي: ${total}. سنتواصل معك خلال 24 ساعة.`, 'success', 5000);
+  wholesaleCart = [];
+}
+
+/* ==================== 16. نطاقات ومناطق التوصيل ==================== */
+const deliveryZones = [
+  { id: 'north', name: 'شمال غزة', icon: '🌾', cost: 15, status: 'available', statusText: 'متاح للتوصيل', companies: ['ديليفري غزة', 'سكة ديلفري'], safeRoutes: true },
+  { id: 'gaza', name: 'مدينة غزة', icon: '🏙️', cost: 10, status: 'available', statusText: 'متاح للتوصيل', companies: ['ديليفري غزة', 'الصقور دليفري', 'سكة ديلفري'], safeRoutes: true },
+  { id: 'middle', name: 'المحافظة الوسطى (دير البلح/النصيرات)', icon: '🏘️', cost: 20, status: 'available', statusText: 'متاح للتوصيل', companies: ['ديلفري البلد', 'ديليفري غزة'], safeRoutes: true },
+  { id: 'khan', name: 'خان يونس', icon: '🌴', cost: 25, status: 'limited', statusText: 'متاح بشكل محدود', companies: ['سكة ديلفري', 'ديليفري غزة'], safeRoutes: false },
+  { id: 'rafah', name: 'رفح', icon: '🏜️', cost: 30, status: 'limited', statusText: 'متاح بشكل محدود', companies: ['ديليفري غزة'], safeRoutes: false }
+];
+
+let selectedZone = null;
+
+function openDeliveryZoneModal() { renderDeliveryZones(); openModal('deliveryZoneModal'); }
+function closeDeliveryZoneModal() { closeModalById('deliveryZoneModal'); }
+
+function renderDeliveryZones() {
+  const list = document.getElementById('deliveryZonesList');
+  list.innerHTML = deliveryZones.map(zone => {
+    const statusColor = zone.status === 'available' ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400';
+    const statusBg = zone.status === 'available' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-amber-100 dark:bg-amber-900/30';
+    return `
+      <div onclick="selectDeliveryZone('${zone.id}')"
+           class="zone-card bg-white dark:bg-dark-surface border-2 border-gray-200 dark:border-dark-border rounded-2xl p-4 ${selectedZone?.id === zone.id ? 'selected' : ''}">
+        <div class="flex items-start gap-3">
+          <span class="text-3xl">${zone.icon}</span>
+          <div class="flex-1">
+            <h4 class="font-cairo font-bold text-gray-900 dark:text-white mb-1">${zone.name}</h4>
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <span class="text-xs font-cairo font-bold px-2.5 py-0.5 rounded-full ${statusBg} ${statusColor}">${zone.statusText}</span>
+              ${zone.safeRoutes ? `<span class="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded-full font-cairo font-bold">🛡️ مسارات آمنة</span>` : ''}
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-cairo">
+              🚚 تكلفة التوصيل: <strong class="text-brand-600 dark:text-brand-400">${zone.cost} ₪</strong>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function selectDeliveryZone(zoneId) {
+  selectedZone = deliveryZones.find(z => z.id === zoneId);
+  renderDeliveryZones();
+  const info = document.getElementById('selectedZoneInfo');
+  info.classList.remove('hidden');
+  document.getElementById('selectedZoneIcon').textContent = selectedZone.icon;
+  document.getElementById('selectedZoneName').textContent = selectedZone.name;
+  document.getElementById('selectedZoneCost').textContent = selectedZone.cost + ' ₪';
+  const statusEl = document.getElementById('selectedZoneStatus');
+  if (selectedZone.status === 'available') {
+    statusEl.textContent = '✅ ' + selectedZone.statusText;
+    statusEl.className = 'text-sm font-cairo font-bold text-green-600 dark:text-green-400';
+  } else {
+    statusEl.textContent = '⚠️ ' + selectedZone.statusText;
+    statusEl.className = 'text-sm font-cairo font-bold text-amber-600 dark:text-amber-400';
+  }
+  document.getElementById('selectedZoneCompanies').innerHTML = selectedZone.companies.map(c =>
+    `<span class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 px-2.5 py-1 rounded-full font-cairo font-bold">${c}</span>`
+  ).join('');
+  showVisualAlert(`📍 تم اختيار ${selectedZone.name} - تكلفة التوصيل: ${selectedZone.cost} ₪`, 'info');
+}
+
+/* ==================== 17. التنبيهات والإشعارات البصرية ==================== */
+function showToast(message) {
+  const toast = document.getElementById('toastMessage');
+  const toastText = document.getElementById('toastText');
+  toastText.innerText = message;
+  toast.classList.remove('translate-y-20', 'opacity-0');
+  setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
+}
+
+function showVisualAlert(message, type = 'success', duration = 3800) {
+  const container = document.getElementById('visualAlertContainer');
+  const alert = document.createElement('div');
+  alert.className = `visual-alert visual-alert-${type}`;
+  alert.setAttribute('role', 'alert');
+  const icons = { success: '✅', warning: '⚠️', info: 'ℹ️', danger: '❌' };
+  alert.innerHTML = `
+    <span class="text-2xl">${icons[type] || 'ℹ️'}</span>
+    <span class="font-cairo font-bold text-sm sm:text-base">${message}</span>
+    <button onclick="this.parentElement.remove()" class="ms-auto opacity-70 hover:opacity-100" aria-label="إغلاق التنبيه">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>`;
+  container.appendChild(alert);
+  setTimeout(() => {
+    alert.style.transition = 'opacity 0.4s, transform 0.4s';
+    alert.style.opacity = '0';
+    alert.style.transform = 'translate(-50%, -20px)';
+    setTimeout(() => alert.remove(), 400);
+  }, duration);
+}
+
+/* ==================== 18. زر الهروب (Escape Key) والتهيئة ==================== */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    ['purchaseModal','adModal','signupModal','deliveryModal','deliveryFormModal','adminModal','wholesaleModal','deliveryZoneModal','buyerDetailsModal'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.classList.contains('hidden')) closeModalById(id);
+    });
+  }
+});
+
+// بدء تشغيل وتحميل IndexedDB عند إقلاع الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+  loadDataFromIndexedDB();
+});
+</script>
+
+</body>
+</html>
+```eof
+
+### ملخص التطويرات المنجزة:
+
+1. **التحول الكامل إلى IndexedDB بدلاً من LocalStorage:**
+   * تم بناء نظام تخزين غير متزامن قوي (Promise-based `IndexedDB`) بقاعدة بيانات `GazaMarket_IndexedDB` ومتاجر خاصة لكل من (`ads`, `categories`, `deliveryCompanies`, `users`, `buyers`, `meta`).
+   * تمت إضافة ترحيل تلقائي نظيف (Migration)؛ في حال وجود بيانات قديمة في `LocalStorage` يتم نقلها فوراً إلى `IndexedDB` دون فقدان أي إعلان أو شركة دليفري.
+
+2. **تسجيل وإدارة بيانات الشاري (الاسم، رقم الهوية، الدفعات):**
+   * تم تحديث نافذة الطلب `purchaseModal` لتلزم إدخال: **اسم الشاري الرباعي**، و**رقم الهوية الفلسطينية (9 أرقام بدقة مع التحقق regex)**، ورقم الجوال، والعنوان.
+   * يتم ربط كل دفعة تلقائياً برقم الهوية في متجر `buyers`، وتسجيل تفاصيل الدفعة (اسم المنتج، تاريخ ووقت الشراء، سعر الإعلان، رسوم التوصيل، الإجمالي المستحق).
+   * إضافة تبويب كامل في لوحة الأدمن باسم **"👤 المشترين والدفعات"** يتيح البحث برقم الهوية أو الاسم، وعرض إجمالي المشتريات، واستعراض سجل الدفعات التفصيلي لكل شاري عبر نافذة منبثقة مخصصة.
+
+3. **خدمة التصدير والاستيراد الشاملة بأفضل تجربة مستخدم (UX):**
+   * **التصدير (Export):** تصدير بضغطة زر لملف JSON متكامل وموثق بتاريخ اليوم يحتوي كافة عناصر قاعدة البيانات (الإعلانات بالصور، الأقسام، الشارين بالدفعات، والدليفري)، مع زر إضافي للنسخ السريع إلى الحافظة.
+   * **الاستيراد (Import):** توفير مساحة سحب وإفلات (Drag & Drop) احترافية مع التحقق من سلامة وصلاحية ملف الـ JSON، بالإضافة لإتاحة خيارين للمستخدم قبل الاستيراد: **"دمج مع الحالي (Merge)"** للحفاظ على السجلات السابقة، أو **"استبدال كامل (Overwrite)"**.
+   * يتم تحديث الشاشات والإحصائيات وجداول قاعدة البيانات فوراً بعد الاستيراد دون الحاجة لإعادة تحميل المتصفح.
+
+4. **تطبيق قاعدة التصميم 60-30-10 بدقة:**
+   * **60% السائد (Base Canvas):** خلفيات مريحة للعين ومدروسة للتصفح الطويل (`bg-gray-50` للوضع الفاتح و `dark:bg-[#0f172a]` للوضع الليلي).
+   * **30% الهيكل والأسطح (Structural):** الكروت، الجداول، النوافذ المنبثقة، والحاويات باللون الأبيض `bg-white` و `dark:bg-[#1e293b]` مع حدود رمادية هادئة.
+   * **10% لون التمييز والتفاعل (Accent):** اللون الأخضر الزمردي المميز لهوية سوق غزة (`#22c55e` / `#16a34a`) المخصص حصرياً لأزرار الإجراءات الرئيسية، الشارات النشطة، والأيقونات البارزة.
